@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BellaTerra Intelligence - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c5530;
+            --secondary-color: #4a7c59;
+            --accent-color: #8fbc8f;
+            --dark-bg: #1a1a2e;
+            --card-bg: #16213e;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-header {
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-weight: 600;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .phase-btn {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phase-btn:disabled {
+            opacity: 0.6;
+        }
+        
+        .phase-btn.running {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+        }
+        
+        .phase-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; }
+        .phase-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border: none; }
+        .phase-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none; }
+        .phase-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border: none; }
+        .phase-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border: none; }
+        .phase-export { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border: none; color: #333; }
+        
+        .log-container {
+            height: 300px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 0.3rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+        }
+        
+        .log-info { color: #8fbc8f; }
+        .log-success { color: #00ff7f; background: rgba(0,255,127,0.1); }
+        .log-warning { color: #ffd700; background: rgba(255,215,0,0.1); }
+        .log-error { color: #ff6b6b; background: rgba(255,107,107,0.1); }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .state-selector {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .county-selector {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .search-type-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-type-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .search-type-card.selected {
+            border: 2px solid var(--accent-color) !important;
+            background: rgba(143, 188, 143, 0.2) !important;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-idle { background: #6c757d; }
+        .status-running { background: #ffc107; animation: blink 1s infinite; }
+        .status-success { background: #28a745; }
+        .status-error { background: #dc3545; }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .progress-bar-animated {
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+        
+        #currentTask {
+            background: rgba(255,193,7,0.2);
+            border: 1px solid rgba(255,193,7,0.5);
+            border-radius: 10px;
+            padding: 1rem;
+            display: none;
+        }
+        
+        #currentTask.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-building me-2"></i>
+                BellaTerra Intelligence
+            </a>
+            <span class="navbar-text">
+                <span class="status-indicator status-idle" id="globalStatus"></span>
+                <span id="statusText">Sistema Pronto</span>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+        <!-- Current Task Banner -->
+        <div id="currentTask" class="mb-4">
+            <div class="d-flex align-items-center">
+                <div class="spinner-border spinner-border-sm text-warning me-3" role="status"></div>
+                <div>
+                    <strong>Executando:</strong> <span id="currentTaskName">-</span>
+                </div>
+            </div>
+            <div class="progress mt-2" style="height: 4px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" style="width: 100%"></div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="row mb-4">
+            <div class="col-md-2">
+                <div class="card stats-card text-white h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-database fs-2 mb-2"></i>
+                        <div class="stats-number" id="statParksRaw">-</div>
+                        <div class="text-white-50">Parks Raw</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card text-white h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-building fs-2 mb-2"></i>
+                        <div class="stats-number" id="statParksMaster">-</div>
+                        <div class="text-white-50">Parks Master</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card text-white h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-person-badge fs-2 mb-2"></i>
+                        <div class="stats-number" id="statOwners">-</div>
+                        <div class="text-white-50">Owners</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card text-white h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-briefcase fs-2 mb-2"></i>
+                        <div class="stats-number" id="statCorporate">-</div>
+                        <div class="text-white-50">Corporativos</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card text-white h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-telephone fs-2 mb-2"></i>
+                        <div class="stats-number" id="statWithPhone">-</div>
+                        <div class="text-white-50">Com Telefone</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card text-white h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-envelope fs-2 mb-2"></i>
+                        <div class="stats-number" id="statContacts">-</div>
+                        <div class="text-white-50">Contatos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Left Column: Pipeline Controls -->
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <i class="bi bi-gear-fill me-2"></i>
+                        Pipeline de Execução
+                    </div>
+                    <div class="card-body">
+                        <button class="btn phase-btn phase-1 text-white" id="btnPhase1" onclick="runPhase('phase1')">
+                            <i class="bi bi-cloud-download me-2"></i>
+                            Fase 1: Ingestão (Google Places)
+                        </button>
+                        
+                        <button class="btn phase-btn phase-2 text-white" id="btnPhase2" onclick="runPhase('phase2')">
+                            <i class="bi bi-layers me-2"></i>
+                            Fase 2: Deduplicação
+                        </button>
+                        
+                        <button class="btn phase-btn phase-3 text-white" id="btnPhase3" onclick="runPhase('phase3')">
+                            <i class="bi bi-person-check me-2"></i>
+                            Fase 3: Identificar Owners
+                        </button>
+                        
+                        <button class="btn phase-btn phase-4 text-white" id="btnPhase4" onclick="runPhase('phase4')">
+                            <i class="bi bi-building-check me-2"></i>
+                            Fase 4: Enriquecer Corporativo
+                        </button>
+                        
+                        <button class="btn phase-btn phase-5 text-white" id="btnPhase5" onclick="runPhase('phase5')">
+                            <i class="bi bi-envelope-paper me-2"></i>
+                            Fase 5: Scraping Contatos
+                        </button>
+                        
+                        <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+                        
+                        <button class="btn phase-btn phase-export" id="btnExport" onclick="runPhase('export')">
+                            <i class="bi bi-file-earmark-spreadsheet me-2"></i>
+                            Exportar CSVs
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Column: Filters -->
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <i class="bi bi-funnel-fill me-2"></i>
+                        Filtros de Busca
+                    </div>
+                    <div class="card-body">
+                        <!-- States -->
+                        <h6 class="mb-3">
+                            <i class="bi bi-geo-alt me-2"></i>
+                            Estados
+                        </h6>
+                        <div class="state-selector mb-4" id="stateSelector">
+                            <div class="text-center text-muted py-3">
+                                <div class="spinner-border spinner-border-sm" role="status"></div>
+                                Carregando estados...
+                            </div>
+                        </div>
+
+                        <!-- Counties -->
+                        <h6 class="mb-3">
+                            <i class="bi bi-map me-2"></i>
+                            Condados <small class="text-muted">(selecione um estado)</small>
+                        </h6>
+                        <div class="county-selector" id="countySelector">
+                            <div class="text-center text-muted py-3">
+                                Selecione um estado para ver os condados
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Search Types -->
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <i class="bi bi-search me-2"></i>
+                        Tipos de Propriedade
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="card search-type-card selected" data-type="mobile_home_park">
+                                    <div class="card-body text-center py-3">
+                                        <i class="bi bi-house-door fs-3 mb-2 d-block"></i>
+                                        <small>Mobile Home Parks</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card search-type-card selected" data-type="rv_park">
+                                    <div class="card-body text-center py-3">
+                                        <i class="bi bi-truck fs-3 mb-2 d-block"></i>
+                                        <small>RV Parks</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card search-type-card selected" data-type="campground">
+                                    <div class="card-body text-center py-3">
+                                        <i class="bi bi-tree fs-3 mb-2 d-block"></i>
+                                        <small>Campgrounds</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card search-type-card" data-type="manufactured_housing">
+                                    <div class="card-body text-center py-3">
+                                        <i class="bi bi-buildings fs-3 mb-2 d-block"></i>
+                                        <small>Manufactured Housing</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+
+                        <h6 class="mb-3">
+                            <i class="bi bi-sliders me-2"></i>
+                            Opções
+                        </h6>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Limite de registros</label>
+                            <input type="number" class="form-control bg-dark text-white border-secondary" 
+                                   id="limitInput" placeholder="Sem limite" min="1">
+                        </div>
+
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="skipApis" checked>
+                            <label class="form-check-label" for="skipApis">Pular APIs externas (Hunter.io)</label>
+                        </div>
+                        
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="reprocess">
+                            <label class="form-check-label" for="reprocess">Reprocessar já processados</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>
+                            <i class="bi bi-terminal me-2"></i>
+                            Logs de Execução
+                        </span>
+                        <button class="btn btn-sm btn-outline-light" onclick="clearLogs()">
+                            <i class="bi bi-trash me-1"></i> Limpar
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="log-container" id="logContainer">
+                            <div class="text-muted text-center py-5">
+                                <i class="bi bi-journal-text fs-1 mb-3 d-block"></i>
+                                Aguardando execução...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- State Stats -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-bar-chart me-2"></i>
+                        Distribuição por Estado
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="stateStats">
+                            <div class="text-center text-muted py-3">
+                                Carregando estatísticas...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Estado da aplicação
+        let selectedStates = ['IN'];
+        let selectedCounties = [];
+        let selectedTypes = ['mobile_home_park', 'rv_park', 'campground'];
+        let isRunning = false;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+            loadStates();
+            setupSearchTypeCards();
+            
+            // Atualizar stats a cada 5 segundos
+            setInterval(loadStats, 5000);
+            
+            // Atualizar logs a cada 2 segundos
+            setInterval(loadLogs, 2000);
+            
+            // Verificar status do pipeline
+            setInterval(checkPipelineStatus, 3000);
+        });
+
+        function loadStats() {
+            fetch('/api/stats')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Erro ao carregar stats:', data.error);
+                        return;
+                    }
+                    
+                    document.getElementById('statParksRaw').textContent = data.parks_raw?.toLocaleString() || '0';
+                    document.getElementById('statParksMaster').textContent = data.parks_master?.toLocaleString() || '0';
+                    document.getElementById('statOwners').textContent = data.owners?.toLocaleString() || '0';
+                    document.getElementById('statCorporate').textContent = data.corporate_owners?.toLocaleString() || '0';
+                    document.getElementById('statWithPhone').textContent = data.with_phone?.toLocaleString() || '0';
+                    document.getElementById('statContacts').textContent = data.contacts?.toLocaleString() || '0';
+                    
+                    // Atualizar stats por estado
+                    if (data.by_state) {
+                        updateStateStats(data.by_state);
+                    }
+                })
+                .catch(e => console.error('Erro:', e));
+        }
+
+        function updateStateStats(byState) {
+            const container = document.getElementById('stateStats');
+            const total = Object.values(byState).reduce((a, b) => a + b, 0);
+            
+            let html = '';
+            const colors = ['#667eea', '#f093fb', '#4facfe', '#43e97b', '#fa709a', '#a8edea', '#ffd700', '#ff6b6b'];
+            let i = 0;
+            
+            for (const [state, count] of Object.entries(byState)) {
+                const pct = ((count / total) * 100).toFixed(1);
+                const color = colors[i % colors.length];
+                html += `
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3" style="width: 50px;">
+                                <div class="fw-bold" style="color: ${color}">${state}</div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar" style="width: ${pct}%; background: ${color};"></div>
+                                </div>
+                            </div>
+                            <div class="ms-3 text-muted" style="min-width: 60px;">
+                                ${count.toLocaleString()}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                i++;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function loadStates() {
+            fetch('/api/states')
+                .then(r => r.json())
+                .then(states => {
+                    const container = document.getElementById('stateSelector');
+                    
+                    if (states.length === 0) {
+                        container.innerHTML = '<div class="text-muted">Nenhum estado encontrado</div>';
+                        return;
+                    }
+                    
+                    let html = '<div class="row g-2">';
+                    for (const state of states) {
+                        const checked = selectedStates.includes(state.code) ? 'checked' : '';
+                        html += `
+                            <div class="col-4">
+                                <div class="form-check">
+                                    <input class="form-check-input state-check" type="checkbox" 
+                                           value="${state.code}" id="state_${state.code}" ${checked}
+                                           onchange="toggleState('${state.code}')">
+                                    <label class="form-check-label" for="state_${state.code}">
+                                        ${state.code} <small class="text-muted">(${state.count})</small>
+                                    </label>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    html += '</div>';
+                    container.innerHTML = html;
+                })
+                .catch(e => {
+                    document.getElementById('stateSelector').innerHTML = 
+                        '<div class="text-danger">Erro ao carregar estados</div>';
+                });
+        }
+
+        function toggleState(stateCode) {
+            const idx = selectedStates.indexOf(stateCode);
+            if (idx > -1) {
+                selectedStates.splice(idx, 1);
+            } else {
+                selectedStates.push(stateCode);
+            }
+            
+            // Carregar condados do primeiro estado selecionado
+            if (selectedStates.length > 0) {
+                loadCounties(selectedStates[0]);
+            } else {
+                document.getElementById('countySelector').innerHTML = 
+                    '<div class="text-center text-muted py-3">Selecione um estado</div>';
+            }
+        }
+
+        function loadCounties(stateCode) {
+            const container = document.getElementById('countySelector');
+            container.innerHTML = '<div class="text-center"><div class="spinner-border spinner-border-sm"></div></div>';
+            
+            fetch(`/api/counties/${stateCode}`)
+                .then(r => r.json())
+                .then(counties => {
+                    if (counties.length === 0) {
+                        container.innerHTML = '<div class="text-muted">Nenhum condado encontrado</div>';
+                        return;
+                    }
+                    
+                    let html = `
+                        <div class="mb-2">
+                            <button class="btn btn-sm btn-outline-success me-1" onclick="selectAllCounties()">
+                                <i class="bi bi-check-all"></i> Todos
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="clearCounties()">
+                                <i class="bi bi-x"></i> Limpar
+                            </button>
+                        </div>
+                        <div class="row g-1">
+                    `;
+                    
+                    for (const county of counties) {
+                        html += `
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input county-check" type="checkbox" 
+                                           value="${county.name}" id="county_${county.name.replace(/\s/g, '_')}">
+                                    <label class="form-check-label small" for="county_${county.name.replace(/\s/g, '_')}">
+                                        ${county.name} <span class="text-muted">(${county.count})</span>
+                                    </label>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    html += '</div>';
+                    container.innerHTML = html;
+                })
+                .catch(e => {
+                    container.innerHTML = '<div class="text-danger">Erro ao carregar condados</div>';
+                });
+        }
+
+        function selectAllCounties() {
+            document.querySelectorAll('.county-check').forEach(cb => cb.checked = true);
+        }
+
+        function clearCounties() {
+            document.querySelectorAll('.county-check').forEach(cb => cb.checked = false);
+        }
+
+        function setupSearchTypeCards() {
+            document.querySelectorAll('.search-type-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const type = this.dataset.type;
+                    const idx = selectedTypes.indexOf(type);
+                    if (idx > -1) {
+                        selectedTypes.splice(idx, 1);
+                    } else {
+                        selectedTypes.push(type);
+                    }
+                });
+            });
+        }
+
+        function runPhase(phase) {
+            if (isRunning) {
+                alert('Já há uma fase em execução. Aguarde...');
+                return;
+            }
+            
+            const options = {
+                states: selectedStates,
+                types: selectedTypes,
+                limit: document.getElementById('limitInput').value || null,
+                skipApis: document.getElementById('skipApis').checked,
+                reprocess: document.getElementById('reprocess').checked,
+            };
+            
+            // Coletar condados selecionados
+            const counties = [];
+            document.querySelectorAll('.county-check:checked').forEach(cb => {
+                counties.push(cb.value);
+            });
+            if (counties.length > 0) {
+                options.counties = counties;
+            }
+            
+            fetch('/api/pipeline/run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phase, options })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Erro: ' + data.error);
+                } else {
+                    console.log('Fase iniciada:', data);
+                }
+            })
+            .catch(e => {
+                alert('Erro ao iniciar fase: ' + e);
+            });
+        }
+
+        function checkPipelineStatus() {
+            fetch('/api/pipeline/status')
+                .then(r => r.json())
+                .then(status => {
+                    const running = status.phase1_running || status.phase2_running || 
+                                   status.phase3_running || status.phase4_running ||
+                                   status.phase5_running || status.export_running;
+                    
+                    isRunning = running;
+                    
+                    const globalStatus = document.getElementById('globalStatus');
+                    const statusText = document.getElementById('statusText');
+                    const currentTask = document.getElementById('currentTask');
+                    const currentTaskName = document.getElementById('currentTaskName');
+                    
+                    if (running) {
+                        globalStatus.className = 'status-indicator status-running';
+                        statusText.textContent = 'Executando...';
+                        currentTask.classList.add('active');
+                        currentTaskName.textContent = status.current_task || 'Processando...';
+                    } else {
+                        globalStatus.className = 'status-indicator status-idle';
+                        statusText.textContent = 'Sistema Pronto';
+                        currentTask.classList.remove('active');
+                    }
+                    
+                    // Atualizar estado dos botões
+                    const buttons = ['btnPhase1', 'btnPhase2', 'btnPhase3', 'btnPhase4', 'btnPhase5', 'btnExport'];
+                    buttons.forEach(id => {
+                        const btn = document.getElementById(id);
+                        btn.disabled = running;
+                        btn.classList.toggle('running', 
+                            (id === 'btnPhase1' && status.phase1_running) ||
+                            (id === 'btnPhase2' && status.phase2_running) ||
+                            (id === 'btnPhase3' && status.phase3_running) ||
+                            (id === 'btnPhase4' && status.phase4_running) ||
+                            (id === 'btnPhase5' && status.phase5_running) ||
+                            (id === 'btnExport' && status.export_running)
+                        );
+                    });
+                })
+                .catch(e => console.error('Erro ao verificar status:', e));
+        }
+
+        function loadLogs() {
+            fetch('/api/logs')
+                .then(r => r.json())
+                .then(logs => {
+                    if (logs.length === 0) return;
+                    
+                    const container = document.getElementById('logContainer');
+                    let html = '';
+                    
+                    for (const log of logs) {
+                        html += `
+                            <div class="log-entry log-${log.level}">
+                                <span class="text-muted">[${log.time}]</span>
+                                ${log.message}
+                            </div>
+                        `;
+                    }
+                    
+                    container.innerHTML = html;
+                    container.scrollTop = container.scrollHeight;
+                })
+                .catch(e => console.error('Erro ao carregar logs:', e));
+        }
+
+        function clearLogs() {
+            fetch('/api/clear-logs', { method: 'POST' })
+                .then(() => {
+                    document.getElementById('logContainer').innerHTML = 
+                        '<div class="text-muted text-center py-5"><i class="bi bi-journal-text fs-1 mb-3 d-block"></i>Logs limpos</div>';
+                });
+        }
+    </script>
+</body>
+</html>

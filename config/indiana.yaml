@@ -1,0 +1,127 @@
+# Configuração do Estado de Indiana - Fase 0 e 1
+# Business Intelligence: Mapeamento de MHP (Mobile Home Parks) e RV Parks
+
+state:
+  name: "Indiana"
+  abbreviation: "IN"
+  fips_code: "18"
+
+# Parâmetros geográficos
+geography:
+  # Bounding box aproximado de Indiana (lat/lon)
+  bbox:
+    min_lat: 37.7713
+    max_lat: 41.7606
+    min_lon: -88.0997
+    max_lon: -84.7844
+
+  # Centro geográfico do estado (para cálculos de raio)
+  center:
+    lat: 39.7684
+    lon: -86.1581
+
+  # SRID para PostGIS (WGS 84 para coordenadas geográficas)
+  srid: 4326
+
+  # SRID projetado para cálculos em metros (UTM Zone 16N para Indiana)
+  projected_srid: 32616
+
+# Fontes de dados potenciais
+data_sources:
+  # APIs públicas (placeholders - adicionar chaves reais no .env)
+  google_places:
+    enabled: true
+    api_key_env: "GOOGLE_PLACES_API_KEY"
+    search_keywords:
+      - "mobile home park"
+      - "trailer park"
+      - "manufactured home community"
+      - "RV park"
+      - "RV resort"
+    radius_meters: 50000 # 50km de raio por busca
+
+  # Outras APIs potenciais
+  yelp:
+    enabled: false
+    api_key_env: "YELP_API_KEY"
+
+  mapbox:
+    enabled: false
+    api_key_env: "MAPBOX_API_KEY"
+
+# Dados governamentais
+government_sources:
+  # Indiana Geographic Information Office
+  gis_portal:
+    url: "https://www.in.gov/gis/"
+    enabled: true
+
+  # County Assessor Records (varia por condado)
+  county_records:
+    enabled: true
+    requires_manual_review: true
+
+# Web scraping (respeitar robots.txt e TOS)
+scraping:
+  # Lista de sites a verificar (sempre verificar robots.txt primeiro)
+  target_sites: []
+
+  # Configurações de rate limiting
+  rate_limit:
+    requests_per_second: 1
+    requests_per_minute: 30
+    delay_between_requests: 2 # segundos
+
+  # User-Agent para identificação
+  user_agent: "MHP-BI-Research-Bot/1.0 (Legal Compliance; Contact: your-email@domain.com)"
+
+  # Respeitar robots.txt
+  respect_robots_txt: true
+
+# Processamento de dados
+processing:
+  # Deduplicação
+  deduplication:
+    distance_threshold_meters: 100 # Considerar duplicatas se < 100m de distância
+    name_similarity_threshold: 0.85 # Similaridade de nome (0-1)
+
+  # Validação de endereços
+  address_validation:
+    enabled: true
+    geocoding_provider: "google" # ou "nominatim" para gratuito
+
+  # Batch sizes para processamento
+  batch_size: 100
+
+# Logging e auditoria
+logging:
+  level: "INFO" # DEBUG, INFO, WARNING, ERROR
+  format: "json"
+  output_dir: "logs"
+
+  # Auditoria de conformidade legal
+  compliance_log:
+    enabled: true
+    track_robots_txt: true
+    track_rate_limits: true
+    track_tos_violations: false
+
+# Limites e quotas
+quotas:
+  max_api_calls_per_day: 10000
+  max_scraping_requests_per_day: 1000
+  budget_alert_threshold: 0.8 # Alertar quando atingir 80% do orçamento
+
+# Metadata do projeto
+project:
+  version: "0.1.0"
+  phase: "Phase 0 - Initial Setup"
+  start_date: "2025-12-08"
+  target_completion: "2026-01-31"
+
+  # Objetivos
+  objectives:
+    - "Mapear todos os MHP e RV parks em Indiana"
+    - "Identificar proprietários legais para mala direta"
+    - "Criar sistema replicável para outros estados"
+    - "Garantir conformidade legal (TOS/robots.txt)"

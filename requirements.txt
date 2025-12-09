@@ -1,0 +1,39 @@
+# Manipulação de dados
+pandas>=2.2.0
+numpy>=2.0.0
+
+# Banco de dados PostgreSQL/PostGIS
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.9
+geoalchemy2>=0.15.0
+
+# Chamadas HTTP e scraping
+requests>=2.31.0
+httpx>=0.27.0
+aiohttp>=3.10.0
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+
+# Geoespacial
+geopy>=2.4.0
+shapely>=2.0.0
+
+# Variáveis de ambiente
+python-dotenv>=1.0.0
+
+# Serialização e validação
+pydantic>=2.9.0
+pydantic-settings>=2.6.0
+pyyaml>=6.0.1
+
+# Logging e monitoramento
+loguru>=0.7.0
+
+# Utilidades
+tenacity>=8.2.0
+tqdm>=4.66.0
+
+# Deduplicação e string matching
+rapidfuzz>=3.0.0
+usaddress>=0.5.0
+python-levenshtein>=0.25.0

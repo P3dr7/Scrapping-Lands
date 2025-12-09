@@ -1,0 +1,73 @@
+# .gitignore para projeto MHP Intelligence
+
+# Variáveis de ambiente
+.env
+.env.local
+
+# Diretórios Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Ambientes virtuais
+venv/
+env/
+ENV/
+.venv/
+
+# Poetry
+poetry.lock
+.poetry/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+logs/
+*.log
+
+# Cache de dados
+data/cache/
+data/*.csv
+data/*.json
+!data/.gitkeep
+
+# Banco de dados local
+*.db
+*.sqlite
+*.sqlite3
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dados sensíveis
+*.key
+*.pem
+credentials.json
+
+# Outputs temporários
+temp/
+tmp/
+*.tmp
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
