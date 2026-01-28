@@ -548,8 +548,13 @@
             </a>
             <a class="nav-item" href="#" onclick="showPage('owners')">
                 <i class="bi bi-people"></i>
-                <span>Proprietários</span>
+                <span>Owners</span>
                 <span class="badge" id="navOwnersCount">-</span>
+            </a>
+            <a class="nav-item" href="#" onclick="showPage('contacts')">
+                <i class="bi bi-envelope"></i>
+                <span>Contacts</span>
+                <span class="badge" id="navContactsCount">-</span>
             </a>
         </nav>
         
@@ -771,7 +776,7 @@
         <!-- ======================= OWNERS PAGE ======================= -->
         <section id="page-owners" class="page-section">
             <header class="page-header">
-                <h1 class="page-title">Proprietários</h1>
+                <h1 class="page-title">Owners</h1>
                 <div class="status-badge idle">
                     <span id="ownersCount">0</span> records
                 </div>
@@ -780,7 +785,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="search-box" style="margin: 0; flex: 1;">
-                        <input type="text" class="search-input" id="ownerSearch" placeholder="Search por nome...">
+                        <input type="text" class="search-input" id="ownerSearch" placeholder="Search by name...">
                         <button class="filter-btn" onclick="loadOwners()"><i class="bi bi-search"></i> Search</button>
                     </div>
                 </div>
@@ -801,14 +806,63 @@
                 </div>
                 <div class="pagination-controls">
                     <div class="pagination-info">
-                        Showing <span id="ownerStart">0</span>-<span id="ownerEnd">0</span> de <span id="ownerTotal">0</span>
+                        Showing <span id="ownerStart">0</span>-<span id="ownerEnd">0</span> of <span id="ownerTotal">0</span>
                     </div>
                     <div class="pagination-buttons">
                         <button class="pagination-btn" id="ownerPrevBtn" onclick="prevOwnersPage()" disabled>
                             <i class="bi bi-chevron-left"></i> Previous
                         </button>
                         <button class="pagination-btn" id="ownerNextBtn" onclick="nextOwnersPage()">
-                            Próximo <i class="bi bi-chevron-right"></i>
+                            Next <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ======================= CONTACTS PAGE ======================= -->
+        <section id="page-contacts" class="page-section">
+            <header class="page-header">
+                <h1 class="page-title">Contacts</h1>
+                <div class="status-badge idle">
+                    <span id="contactsCount">0</span> records
+                </div>
+            </header>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="search-box" style="margin: 0; flex: 1;">
+                        <input type="text" class="search-input" id="contactSearch" placeholder="Search by name, email or phone...">
+                        <button class="filter-btn" onclick="loadContacts()"><i class="bi bi-search"></i> Search</button>
+                    </div>
+                </div>
+                <div class="card-body" style="padding: 0; overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Person Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Type</th>
+                                <th>Title</th>
+                                <th>Source</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contactsTableBody">
+                            <tr><td colspan="6" class="empty-state">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls">
+                    <div class="pagination-info">
+                        Showing <span id="contactStart">0</span>-<span id="contactEnd">0</span> of <span id="contactTotal">0</span>
+                    </div>
+                    <div class="pagination-buttons">
+                        <button class="pagination-btn" id="contactPrevBtn" onclick="prevContactsPage()" disabled>
+                            <i class="bi bi-chevron-left"></i> Previous
+                        </button>
+                        <button class="pagination-btn" id="contactNextBtn" onclick="nextContactsPage()">
+                            Next <i class="bi bi-chevron-right"></i>
                         </button>
                     </div>
                 </div>
@@ -824,12 +878,14 @@
         let selectedTypes = ['mobile_home_park', 'rv_park', 'campground'];
         let isRunning = false;
         
-        // Paginação
+        // Pagination
         let propertiesPage = 1;
         let ownersPage = 1;
+        let contactsPage = 1;
         const pageSize = 50;
         let propertiesData = [];
         let ownersData = [];
+        let contactsData = [];
         
         const stateColors = ['#3b82f6', '#22c55e', '#a855f7', '#eab308', '#ef4444', '#ec4899', '#06b6d4', '#f97316'];
 
@@ -856,11 +912,13 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             event.currentTarget.classList.add('active');
             
-            // Carregar dados da página
+            // Load page data
             if (page === 'properties') {
                 loadProperties();
             } else if (page === 'owners') {
                 loadOwners();
+            } else if (page === 'contacts') {
+                loadContacts();
             }
         }
 
@@ -884,6 +942,7 @@
                     
                     document.getElementById('navParksCount').textContent = formatNumber(data.parks_master);
                     document.getElementById('navOwnersCount').textContent = formatNumber(data.owners);
+                    document.getElementById('navContactsCount').textContent = formatNumber(data.contacts);
                     
                     if (data.by_state && Object.keys(data.by_state).length > 0) {
                         updateStateDistribution(data.by_state);
@@ -1049,6 +1108,59 @@
 
         function prevOwnersPage() { if (ownersPage > 1) { ownersPage--; loadOwners(); } }
         function nextOwnersPage() { ownersPage++; loadOwners(); }
+
+        // ======================= CONTACTS =======================
+        function loadContacts() {
+            const search = document.getElementById('contactSearch')?.value || '';
+            fetch(`/api/contacts?page=${contactsPage}&limit=${pageSize}&search=${encodeURIComponent(search)}`)
+                .then(r => r.json())
+                .then(data => {
+                    contactsData = data.items || [];
+                    const total = data.total || 0;
+                    
+                    document.getElementById('contactsCount').textContent = total.toLocaleString();
+                    document.getElementById('contactTotal').textContent = total;
+                    document.getElementById('contactStart').textContent = total > 0 ? (contactsPage - 1) * pageSize + 1 : 0;
+                    document.getElementById('contactEnd').textContent = Math.min(contactsPage * pageSize, total);
+                    
+                    document.getElementById('contactPrevBtn').disabled = contactsPage <= 1;
+                    document.getElementById('contactNextBtn').disabled = contactsPage * pageSize >= total;
+                    
+                    renderContactsTable();
+                })
+                .catch(e => {
+                    document.getElementById('contactsTableBody').innerHTML = '<tr><td colspan="6" class="empty-state">Error loading data</td></tr>';
+                });
+        }
+
+        function renderContactsTable() {
+            const tbody = document.getElementById('contactsTableBody');
+            if (contactsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No contacts found</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            for (const c of contactsData) {
+                const email = c.email ? `<a href="mailto:${c.email}" style="color: var(--accent-blue);">${c.email}</a>` : '-';
+                const phone = c.phone || '-';
+                const typeBadge = c.contact_type ? `<span class="badge badge-info">${c.contact_type}</span>` : '-';
+                html += `
+                    <tr>
+                        <td><strong>${c.person_name || '-'}</strong></td>
+                        <td>${email}</td>
+                        <td>${phone}</td>
+                        <td>${typeBadge}</td>
+                        <td>${c.person_title || '-'}</td>
+                        <td>${c.source || '-'}</td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function prevContactsPage() { if (contactsPage > 1) { contactsPage--; loadContacts(); } }
+        function nextContactsPage() { contactsPage++; loadContacts(); }
 
         // ======================= PIPELINE =======================
         let isVercelMode = false;

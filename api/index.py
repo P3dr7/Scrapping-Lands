@@ -421,6 +421,71 @@ def api_logs():
     return jsonify([])
 
 
+@app.route('/api/contacts')
+def api_contacts():
+    """Returns list of contacts with pagination."""
+    try:
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 50))
+        search = request.args.get('search', '').strip()
+        
+        offset = (page - 1) * limit
+        
+        engine = get_engine()
+        with engine.connect() as conn:
+            # Base query
+            base_where = "1=1"
+            params = {'limit': limit, 'offset': offset}
+            
+            if search:
+                base_where = """(
+                    LOWER(person_name) LIKE :search OR 
+                    LOWER(email) LIKE :search OR 
+                    phone LIKE :search
+                )"""
+                params['search'] = f'%{search.lower()}%'
+            
+            # Total
+            count_sql = f"SELECT COUNT(*) FROM contacts WHERE {base_where}"
+            total = conn.execute(text(count_sql), params).scalar() or 0
+            
+            # Data
+            data_sql = f"""
+                SELECT 
+                    c.id, c.person_name, c.email, c.phone, 
+                    c.contact_type, c.person_title, c.source,
+                    c.email_verified, c.phone_verified
+                FROM contacts c
+                WHERE {base_where}
+                ORDER BY c.person_name ASC NULLS LAST
+                LIMIT :limit OFFSET :offset
+            """
+            rows = conn.execute(text(data_sql), params).fetchall()
+            
+            items = []
+            for row in rows:
+                items.append({
+                    'id': row[0],
+                    'person_name': row[1],
+                    'email': row[2],
+                    'phone': row[3],
+                    'contact_type': row[4],
+                    'person_title': row[5],
+                    'source': row[6],
+                    'email_verified': row[7],
+                    'phone_verified': row[8],
+                })
+            
+            return jsonify({
+                'items': items,
+                'total': total,
+                'page': page,
+                'pages': (total + limit - 1) // limit,
+            })
+    except Exception as e:
+        return jsonify({'items': [], 'total': 0, 'error': str(e)})
+
+
 @app.route('/api/clear-logs', methods=['POST'])
 def api_clear_logs():
     """Clears logs."""
