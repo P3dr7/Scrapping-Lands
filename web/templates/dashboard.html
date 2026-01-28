@@ -1051,7 +1051,13 @@
         function nextOwnersPage() { ownersPage++; loadOwners(); }
 
         // ======================= PIPELINE =======================
+        let isVercelMode = false;
+        
         function runPhase(phase) {
+            if (isVercelMode) {
+                alert('Pipeline não disponível no modo Vercel. Execute localmente para usar o pipeline.');
+                return;
+            }
             if (isRunning) { alert('Já existe uma fase em execução.'); return; }
             
             const options = {
@@ -1076,6 +1082,25 @@
             fetch('/api/pipeline/status')
                 .then(r => r.json())
                 .then(status => {
+                    // Detectar modo Vercel
+                    if (status.vercel_mode) {
+                        isVercelMode = true;
+                        const badge = document.getElementById('globalStatusBadge');
+                        const statusText = document.getElementById('statusText');
+                        badge.className = 'status-badge idle';
+                        statusText.textContent = 'Modo Visualização';
+                        
+                        // Desabilitar botões de pipeline
+                        ['btnPhase1', 'btnPhase2', 'btnPhase3', 'btnPhase4', 'btnPhase5', 'btnExport'].forEach(id => {
+                            const btn = document.getElementById(id);
+                            if (btn) {
+                                btn.disabled = true;
+                                btn.title = 'Pipeline não disponível no modo Vercel';
+                            }
+                        });
+                        return;
+                    }
+                    
                     const running = status.phase1_running || status.phase2_running || 
                                    status.phase3_running || status.phase4_running ||
                                    status.phase5_running || status.export_running;
@@ -1098,7 +1123,8 @@
                     }
                     
                     ['btnPhase1', 'btnPhase2', 'btnPhase3', 'btnPhase4', 'btnPhase5', 'btnExport'].forEach(id => {
-                        document.getElementById(id).disabled = running;
+                        const btn = document.getElementById(id);
+                        if (btn) btn.disabled = running;
                     });
                 });
         }
