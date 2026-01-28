@@ -42,36 +42,42 @@ def get_engine():
     """Creates PostgreSQL database engine."""
     global _engine_cache
     if _engine_cache is None:
-        host = os.getenv("DB_HOST")
-        port = os.getenv("DB_PORT", "5432")
-        database = os.getenv("DB_NAME")
-        user = os.getenv("DB_USER")
-        password = os.getenv("DB_PASSWORD")
+        # Option 1: Use DATABASE_URL directly (recommended for Supabase)
+        database_url = os.getenv("DATABASE_URL")
         
-        if not all([host, database, user, password]):
-            raise ValueError("Database credentials not configured. Please set DB_HOST, DB_NAME, DB_USER, and DB_PASSWORD environment variables in Vercel.")
+        if database_url:
+            # Use the Supabase connection string directly
+            connection_string = database_url
+            # Ensure SSL is enabled
+            if "sslmode" not in connection_string:
+                connection_string += "?sslmode=require" if "?" not in connection_string else "&sslmode=require"
+        else:
+            # Option 2: Build from individual variables
+            host = os.getenv("DB_HOST")
+            port = os.getenv("DB_PORT", "6543")  # Use pooler port by default
+            database = os.getenv("DB_NAME")
+            user = os.getenv("DB_USER")
+            password = os.getenv("DB_PASSWORD")
+            
+            if not all([host, database, user, password]):
+                raise ValueError("Database not configured. Set DATABASE_URL or DB_HOST, DB_NAME, DB_USER, DB_PASSWORD in Vercel.")
+            
+            connection_string = f"postgresql://{user}:{password}@{host}:{port}/{database}?sslmode=require"
         
-        # Supabase requires SSL and specific connection settings
-        connection_string = f"postgresql://{user}:{password}@{host}:{port}/{database}?sslmode=require"
         _engine_cache = create_engine(
             connection_string, 
             pool_pre_ping=True,
             pool_recycle=300,
-            pool_size=5,
-            max_overflow=10,
+            pool_size=1,  # Minimal pool for serverless
+            max_overflow=2,
             pool_timeout=30,
             connect_args={
                 "connect_timeout": 30,
                 "application_name": "bellaterra_vercel",
-                "sslmode": "require",
-                "keepalives": 1,
-                "keepalives_idle": 30,
-                "keepalives_interval": 10,
-                "keepalives_count": 5
+                "sslmode": "require"
             }
         )
     return _engine_cache
-
 
 def get_db_stats():
     """Returns database statistics."""
