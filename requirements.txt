@@ -1,6 +1,17 @@
 # Web Framework
 flask>=3.0.0
 
+# Banco de dados PostgreSQL
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.9
+
+# Variáveis de ambiente
+python-dotenv>=1.0.0
+
+# ============ Dependências opcionais para desenvolvimento local ============
+# As dependências abaixo são necessárias apenas para executar o pipeline localmente
+# Não são necessárias para o deploy na Vercel (apenas visualização)
+
 # Manipulação de dados
 pandas>=2.2.0
 numpy>=2.0.0
