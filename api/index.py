@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-BellaTerra Intelligence - API para Vercel
-Dashboard para visualização de dados de MHP/RV Parks.
+BellaTerra Intelligence - Vercel API
+Dashboard for MHP/RV Parks data visualization.
 """
 
 import os
 import sys
 
-# Configuração de caminhos ANTES de importar Flask
+# Path configuration BEFORE importing Flask
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(current_dir)
 sys.path.insert(0, root_dir)
@@ -15,11 +15,11 @@ sys.path.insert(0, root_dir)
 from flask import Flask, render_template, jsonify, request
 from sqlalchemy import create_engine, text
 
-# Configuração Flask para Vercel
+# Flask configuration for Vercel
 template_path = os.path.join(root_dir, 'web', 'templates')
 static_path = os.path.join(root_dir, 'web', 'static')
 
-# Verificar se os diretórios existem
+# Check if directories exist
 if not os.path.exists(template_path):
     template_path = None
 if not os.path.exists(static_path):
@@ -31,11 +31,11 @@ app = Flask(__name__,
 )
 app.secret_key = os.getenv('SECRET_KEY', 'bellaterra-secret-key-2025')
 
-# Desabilitar debug em produção
+# Disable debug in production
 app.config['DEBUG'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
-# Cache do engine
+# Engine cache
 _engine_cache = None
 
 def get_engine():
@@ -71,21 +71,21 @@ def get_db_stats():
         with engine.connect() as conn:
             stats = {}
             
-            # Total de parques raw
+            # Total parks raw
             try:
                 r = conn.execute(text("SELECT COUNT(*) FROM parks_raw"))
                 stats['parks_raw'] = r.scalar() or 0
             except Exception:
                 stats['parks_raw'] = 0
             
-            # Total de parques master
+            # Total parks master
             try:
                 r = conn.execute(text("SELECT COUNT(*) FROM parks_master"))
                 stats['parks_master'] = r.scalar() or 0
             except Exception:
                 stats['parks_master'] = 0
             
-            # Por estado
+            # By state
             try:
                 r = conn.execute(text("""
                     SELECT state, COUNT(*) 
@@ -98,7 +98,7 @@ def get_db_stats():
             except Exception:
                 stats['by_state'] = {}
             
-            # Com website
+            # With website
             try:
                 r = conn.execute(text("""
                     SELECT COUNT(*) FROM parks_master 
@@ -108,7 +108,7 @@ def get_db_stats():
             except Exception:
                 stats['with_website'] = 0
             
-            # Com telefone
+            # With phone
             try:
                 r = conn.execute(text("""
                     SELECT COUNT(*) FROM parks_master 
@@ -125,7 +125,7 @@ def get_db_stats():
             except Exception:
                 stats['owners'] = 0
             
-            # Owners corporativos (is_individual = false)
+            # Corporate owners (is_individual = false)
             try:
                 r = conn.execute(text("SELECT COUNT(*) FROM owners WHERE is_individual = false"))
                 stats['corporate_owners'] = r.scalar() or 0
@@ -139,14 +139,14 @@ def get_db_stats():
             except Exception:
                 stats['companies'] = 0
             
-            # Contatos
+            # Contacts
             try:
                 r = conn.execute(text("SELECT COUNT(*) FROM contacts"))
                 stats['contacts'] = r.scalar() or 0
             except Exception:
                 stats['contacts'] = 0
             
-            # Contatos com email
+            # Contacts with email
             try:
                 r = conn.execute(text("""
                     SELECT COUNT(*) FROM contacts 
@@ -164,11 +164,11 @@ def get_db_stats():
     except Exception as e:
         return {'error': f'Database connection error: {str(e)}', 'db_configured': True, 'parks_raw': 0, 'parks_master': 0, 'by_state': {}, 
                 'with_website': 0, 'with_phone': 0, 'owners': 0, 'corporate_owners': 0,
-          urns list of available state: 0, 'contacts_with_email': 0}
+                'companies': 0, 'contacts': 0, 'contacts_with_email': 0}
 
 
 def get_states_list():
-    """Retorna lista de estados disponíveis."""
+    """Returns list of available states."""
     try:
         engine = get_engine()
         with engine.connect() as conn:
@@ -181,11 +181,11 @@ def get_states_list():
             """))
             return [{'code': row[0], 'count': row[1]} for row in r]
     except Exception:
-        reurns list of counties for a state
+        return []
 
 
 def get_counties_for_state(state_code: str):
-    """Retorna lista de condados para um estado."""
+    """Returns list of counties for a state."""
     try:
         engine = get_engine()
         with engine.connect() as conn:
@@ -202,14 +202,18 @@ def get_counties_for_state(state_code: str):
 
 
 # ============================================================================
-# ROTAS
-# =====Main dashboard page."""
+# ROUTES
+# ============================================================================
+
+@app.route('/')
+def index():
+    """Main dashboard page."""
     return render_template('dashboard.html')
 
 
 @app.route('/health')
 def health():
-    """Heaurns database statistics
+    """Health check endpoint."""
     try:
         engine = get_engine()
         with engine.connect() as conn:
@@ -220,21 +224,43 @@ def health():
             'db_host': os.getenv('DB_HOST', 'not configured')
         })
     except ValueError as ve:
-        reurns list of state
+        return jsonify({
             'status': 'error',
             'database': 'not configured',
             'message': str(ve)
         }), 500
     except Exception as e:
         return jsonify({
-          urns counties for a state
+            'status': 'error',
             'database': 'connection failed',
             'message': str(e)
         }), 500
-@app.route('/')
-def index():
-    """Página principal."""
-    returnurns pipeline status - always idle on Vercel."""
+
+
+@app.route('/api/stats')
+def api_stats():
+    """Returns database statistics."""
+    stats = get_db_stats()
+    return jsonify(stats)
+
+
+@app.route('/api/states')
+def api_states():
+    """Returns list of states."""
+    states = get_states_list()
+    return jsonify(states)
+
+
+@app.route('/api/counties/<state_code>')
+def api_counties(state_code):
+    """Returns counties for a state."""
+    counties = get_counties_for_state(state_code)
+    return jsonify(counties)
+
+
+@app.route('/api/pipeline/status')
+def api_pipeline_status():
+    """Returns pipeline status - always idle on Vercel."""
     return jsonify({
         'phase1_running': False,
         'phase2_running': False,
@@ -247,39 +273,13 @@ def index():
         'logs': [],
         'last_update': None,
         'vercel_mode': True,
-        'message': 'Pipeline not available in Vercel mode. Run locally to execute
-    return jsonify(states)
-
-
-@app.route('/api/counties/<state_code>')
-def api_counties(state_code):
-    """Retorna coot available onado."""
-    counties = get_counties_for_state(state_code)
-    return jsonify(counties)
-
-
-@app.route('/api/pipeline/status')
-def api_pipeline_status():
-    """Retorna status do pipeline - sempre idle no Vercel."""
-    return jsonify({
-        'purns list of properties with pagination
-        'phase2_running': False,
-        'phase3_running': False,
-        'phase4_running': False,
-        'phase5_running': False,
-        'export_running': False,
-        'current_task': None,
-        'progress': 0,
-        'logs': [],
-        'last_update': None,
-        'vercel_mode': True,
-        'message': 'Pipeline não disponível no modo Vercel. Use localmente para executar.'
+        'message': 'Pipeline not available in Vercel mode. Run locally to execute.'
     })
 
 
 @app.route('/api/pipeline/run', methods=['POST'])
 def api_run_pipeline():
-    """Pipeline não disponível no Vercel."""
+    """Pipeline not available on Vercel."""
     return jsonify({
         'error': 'Pipeline execution not available in Vercel deployment. Please run locally.',
         'vercel_mode': True
@@ -288,7 +288,7 @@ def api_run_pipeline():
 
 @app.route('/api/properties')
 def api_properties():
-    """Retorna lista de propriedades com paginação."""
+    """Returns list of properties with pagination."""
     try:
         page = int(request.args.get('page', 1))
         limit = int(request.args.get('limit', 50))
@@ -298,7 +298,7 @@ def api_properties():
         
         engine = get_engine()
         with engine.connect() as conn:
-            # Query base
+            # Base query
             base_where = "1=1"
             params = {'limit': limit, 'offset': offset}
             
@@ -310,7 +310,7 @@ def api_properties():
             count_sql = f"SELECT COUNT(*) FROM parks_master WHERE {base_where}"
             total = conn.execute(text(count_sql), params).scalar() or 0
             
-            # Dados - usando colunas corretas: latitude/longitude
+            # Data - using correct columns: latitude/longitude
             data_sql = f"""
                 SELECT id, name, city, state, phone, website, address, latitude, longitude
                 FROM parks_master 
@@ -356,7 +356,7 @@ def api_owners():
         
         engine = get_engine()
         with engine.connect() as conn:
-            # Query base - usando full_name (coluna correta)
+            # Base query - using full_name (correct column)
             base_where = "1=1"
             params = {'limit': limit, 'offset': offset}
             
@@ -368,7 +368,7 @@ def api_owners():
             count_sql = f"SELECT COUNT(*) FROM owners WHERE {base_where}"
             total = conn.execute(text(count_sql), params).scalar() or 0
             
-            # Dados - usando full_name e is_individual (colunas corretas)
+            # Data - using full_name and is_individual (correct columns)
             data_sql = f"""
                 SELECT 
                     o.id, o.full_name, o.is_individual, o.source,
@@ -412,9 +412,10 @@ def api_clear_logs():
     return jsonify({'status': 'ok'})
 
 
-# Handler para Vercel - WSGI application
-app = app
+# WSGI application for Vercel
+# The `app` variable is automatically detected by Vercel
 
-# Para rodar localmente
+# For local development
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+
