@@ -13,47 +13,34 @@
             --bg-secondary: #1e293b;
             --bg-card: #1e293b;
             --bg-card-hover: #334155;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
+            --text-primary: #ffffff;
+            --text-secondary: #e2e8f0;
+            --text-muted: #94a3b8;
             --accent-blue: #3b82f6;
             --accent-green: #22c55e;
             --accent-yellow: #eab308;
             --accent-red: #ef4444;
             --accent-purple: #a855f7;
             --border-color: #334155;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            line-height: 1.6;
         }
         
         /* Sidebar */
         .sidebar {
             position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 280px;
+            left: 0; top: 0; bottom: 0;
+            width: 260px;
             background: var(--bg-secondary);
             border-right: 1px solid var(--border-color);
-            padding: 24px;
-            overflow-y: auto;
+            padding: 20px;
             z-index: 100;
         }
         
@@ -62,14 +49,13 @@
             align-items: center;
             gap: 12px;
             margin-bottom: 32px;
-            padding-bottom: 24px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
         }
         
         .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-4);
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -80,16 +66,12 @@
         .logo-text {
             font-size: 18px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: #ffffff;
         }
         
-        .logo-text span {
-            color: var(--accent-green);
-        }
+        .logo-text span { color: var(--accent-green); }
         
-        .nav-section {
-            margin-bottom: 24px;
-        }
+        .nav-section { margin-bottom: 24px; }
         
         .nav-section-title {
             font-size: 11px;
@@ -107,7 +89,7 @@
             gap: 12px;
             padding: 12px 16px;
             border-radius: 8px;
-            color: var(--text-secondary);
+            color: #ffffff;
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
@@ -122,19 +104,15 @@
         
         .nav-item:hover {
             background: var(--bg-card-hover);
-            color: var(--text-primary);
+            color: #ffffff;
         }
         
         .nav-item.active {
-            background: rgba(59, 130, 246, 0.15);
+            background: rgba(59, 130, 246, 0.2);
             color: var(--accent-blue);
         }
         
-        .nav-item i {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
+        .nav-item i { font-size: 18px; width: 24px; text-align: center; }
         
         .nav-item .badge {
             margin-left: auto;
@@ -147,12 +125,11 @@
         
         /* Main Content */
         .main-content {
-            margin-left: 280px;
+            margin-left: 260px;
             padding: 32px;
             min-height: 100vh;
         }
         
-        /* Header */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -163,6 +140,7 @@
         .page-title {
             font-size: 28px;
             font-weight: 700;
+            color: #ffffff;
         }
         
         .status-badge {
@@ -173,33 +151,28 @@
             border-radius: 20px;
             font-size: 13px;
             font-weight: 500;
+            color: #ffffff;
         }
         
-        .status-badge.idle {
-            background: rgba(100, 116, 139, 0.2);
-            color: var(--text-secondary);
-        }
-        
-        .status-badge.running {
-            background: rgba(234, 179, 8, 0.2);
-            color: var(--accent-yellow);
-        }
+        .status-badge.idle { background: rgba(100, 116, 139, 0.3); }
+        .status-badge.running { background: rgba(234, 179, 8, 0.3); color: var(--accent-yellow); }
         
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             border-radius: 50%;
             background: currentColor;
         }
         
-        .status-badge.running .status-dot {
-            animation: pulse-dot 1.5s ease infinite;
-        }
+        .status-badge.running .status-dot { animation: pulse-dot 1.5s ease infinite; }
         
         @keyframes pulse-dot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
+        
+        /* Page sections - hidden by default */
+        .page-section { display: none; }
+        .page-section.active { display: block; }
         
         /* Stats Grid */
         .stats-grid {
@@ -223,8 +196,7 @@
         }
         
         .stat-icon {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -233,30 +205,15 @@
             margin-bottom: 12px;
         }
         
-        .stat-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
-        .stat-icon.green { background: rgba(34, 197, 94, 0.15); color: var(--accent-green); }
-        .stat-icon.purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
-        .stat-icon.yellow { background: rgba(234, 179, 8, 0.15); color: var(--accent-yellow); }
+        .stat-icon.blue { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        .stat-icon.green { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .stat-icon.purple { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+        .stat-icon.yellow { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); }
         
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
+        .stat-value { font-size: 28px; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
+        .stat-label { font-size: 13px; color: var(--text-muted); }
         
-        .stat-label {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-        
-        /* Content Grid */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-        
+        /* Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -270,18 +227,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: #ffffff;
         }
         
         .card-title {
             font-size: 14px;
             font-weight: 600;
+            color: #ffffff;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
-        .card-body {
-            padding: 20px;
+        .card-body { padding: 20px; }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
         }
         
         /* Pipeline Buttons */
@@ -299,58 +264,38 @@
             gap: 12px;
             transition: all 0.2s ease;
             color: white;
-            position: relative;
-            overflow: hidden;
         }
         
-        .pipeline-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .pipeline-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pipeline-btn:not(:disabled):hover { transform: translateX(4px); }
         
-        .pipeline-btn:not(:disabled):hover {
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
+        .pipeline-btn.phase-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .pipeline-btn.phase-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .pipeline-btn.phase-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .pipeline-btn.phase-4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .pipeline-btn.phase-5 { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .pipeline-btn.phase-export { background: linear-gradient(135deg, #1e3a5f, #2d5a87); border: 1px solid var(--accent-blue); }
         
-        .pipeline-btn.phase-1 { background: var(--gradient-1); }
-        .pipeline-btn.phase-2 { background: var(--gradient-2); }
-        .pipeline-btn.phase-3 { background: var(--gradient-3); }
-        .pipeline-btn.phase-4 { background: var(--gradient-4); }
-        .pipeline-btn.phase-5 { background: var(--gradient-5); }
-        .pipeline-btn.phase-export { 
-            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
-            border: 1px solid var(--accent-blue);
-        }
-        
-        .pipeline-btn i {
-            font-size: 18px;
-            width: 24px;
-        }
+        .pipeline-btn i { font-size: 18px; width: 24px; }
         
         .pipeline-btn.running::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             animation: shimmer 1.5s infinite;
         }
         
-        @keyframes shimmer {
-            100% { left: 100%; }
-        }
+        @keyframes shimmer { 100% { left: 100%; } }
         
-        /* State Checkbox */
+        /* State Grid */
         .state-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             max-height: 200px;
             overflow-y: auto;
-            padding-right: 8px;
         }
         
         .state-item {
@@ -361,39 +306,15 @@
             background: var(--bg-primary);
             border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
         
-        .state-item:hover {
-            background: var(--bg-card-hover);
-        }
-        
-        .state-item input {
-            accent-color: var(--accent-green);
-        }
-        
-        .state-item label {
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .state-count {
-            font-size: 11px;
-            color: var(--text-muted);
-            background: var(--bg-card-hover);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
+        .state-item:hover { background: var(--bg-card-hover); }
+        .state-item input { accent-color: var(--accent-green); }
+        .state-item label { font-size: 13px; cursor: pointer; color: #ffffff; }
+        .state-count { font-size: 11px; color: var(--text-muted); background: var(--bg-card-hover); padding: 2px 6px; border-radius: 4px; }
         
         /* Search Types */
-        .search-types {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
+        .search-types { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         
         .search-type {
             padding: 16px;
@@ -403,27 +324,13 @@
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
+            color: #ffffff;
         }
         
-        .search-type:hover {
-            border-color: var(--border-color);
-        }
-        
-        .search-type.selected {
-            border-color: var(--accent-green);
-            background: rgba(34, 197, 94, 0.1);
-        }
-        
-        .search-type i {
-            font-size: 24px;
-            margin-bottom: 8px;
-            display: block;
-        }
-        
-        .search-type span {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
+        .search-type:hover { border-color: var(--border-color); }
+        .search-type.selected { border-color: var(--accent-green); background: rgba(34, 197, 94, 0.1); }
+        .search-type i { font-size: 24px; margin-bottom: 8px; display: block; }
+        .search-type span { font-size: 12px; color: var(--text-secondary); }
         
         /* Log Container */
         .log-container {
@@ -432,120 +339,46 @@
             height: 250px;
             overflow-y: auto;
             padding: 16px;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-family: 'Consolas', monospace;
             font-size: 12px;
         }
         
-        .log-entry {
-            padding: 4px 8px;
-            margin-bottom: 4px;
-            border-radius: 4px;
-            display: flex;
-            gap: 12px;
-        }
-        
-        .log-time {
-            color: var(--text-muted);
-            min-width: 70px;
-        }
-        
+        .log-entry { padding: 4px 8px; margin-bottom: 4px; border-radius: 4px; display: flex; gap: 12px; }
+        .log-time { color: var(--text-muted); min-width: 70px; }
         .log-entry.info { color: var(--text-secondary); }
         .log-entry.success { color: var(--accent-green); background: rgba(34, 197, 94, 0.1); }
         .log-entry.warning { color: var(--accent-yellow); background: rgba(234, 179, 8, 0.1); }
         .log-entry.error { color: var(--accent-red); background: rgba(239, 68, 68, 0.1); }
         
         /* State Distribution */
-        .state-bar {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        
-        .state-bar-label {
-            width: 40px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-        
-        .state-bar-track {
-            flex: 1;
-            height: 8px;
-            background: var(--bg-primary);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .state-bar-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-        
-        .state-bar-value {
-            width: 60px;
-            text-align: right;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
+        .state-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .state-bar-label { width: 40px; font-size: 13px; font-weight: 600; color: #ffffff; }
+        .state-bar-track { flex: 1; height: 8px; background: var(--bg-primary); border-radius: 4px; overflow: hidden; }
+        .state-bar-fill { height: 100%; border-radius: 4px; }
+        .state-bar-value { width: 60px; text-align: right; font-size: 13px; color: var(--text-muted); }
         
         /* Task Banner */
         .task-banner {
-            background: linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(251, 146, 60, 0.15) 100%);
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(251, 146, 60, 0.15));
             border: 1px solid rgba(234, 179, 8, 0.3);
             border-radius: 12px;
             padding: 16px 20px;
             margin-bottom: 24px;
             display: none;
         }
-        
-        .task-banner.active {
-            display: block;
-        }
-        
-        .task-banner-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
+        .task-banner.active { display: block; }
+        .task-banner-content { display: flex; align-items: center; gap: 12px; }
         .task-spinner {
-            width: 24px;
-            height: 24px;
+            width: 24px; height: 24px;
             border: 3px solid rgba(234, 179, 8, 0.3);
             border-top-color: var(--accent-yellow);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .task-info {
-            flex: 1;
-        }
-        
-        .task-name {
-            font-weight: 600;
-            color: var(--accent-yellow);
-        }
-        
-        .task-progress {
-            height: 4px;
-            background: rgba(234, 179, 8, 0.2);
-            border-radius: 2px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-        
-        .task-progress-bar {
-            height: 100%;
-            background: var(--accent-yellow);
-            border-radius: 2px;
-            animation: progress-indeterminate 1.5s ease infinite;
-        }
-        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .task-name { font-weight: 600; color: var(--accent-yellow); }
+        .task-progress { height: 4px; background: rgba(234, 179, 8, 0.2); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+        .task-progress-bar { height: 100%; background: var(--accent-yellow); animation: progress-indeterminate 1.5s ease infinite; }
         @keyframes progress-indeterminate {
             0% { width: 0; margin-left: 0; }
             50% { width: 60%; margin-left: 20%; }
@@ -553,108 +386,144 @@
         }
         
         /* Options */
-        .options-group {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .option-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0;
-        }
-        
-        .option-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
+        .options-group { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); }
+        .option-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; }
+        .option-label { font-size: 13px; color: #ffffff; }
         
         .form-control {
             background: var(--bg-primary);
             border: 1px solid var(--border-color);
-            color: var(--text-primary);
+            color: #ffffff;
             border-radius: 6px;
             padding: 8px 12px;
             font-size: 13px;
         }
-        
-        .form-control:focus {
-            border-color: var(--accent-blue);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
+        .form-control:focus { border-color: var(--accent-blue); outline: none; }
+        .form-control::placeholder { color: var(--text-muted); }
         
         .form-switch .form-check-input {
-            width: 40px;
-            height: 20px;
+            width: 40px; height: 20px;
             background-color: var(--bg-primary);
             border: 1px solid var(--border-color);
         }
+        .form-switch .form-check-input:checked { background-color: var(--accent-green); border-color: var(--accent-green); }
         
-        .form-switch .form-check-input:checked {
-            background-color: var(--accent-green);
-            border-color: var(--accent-green);
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
         }
+        
+        .data-table th {
+            text-align: left;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table td {
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table tr:hover td { background: var(--bg-card-hover); }
+        
+        .data-table .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .badge-warning { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); }
+        .badge-info { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        
+        /* Pagination */
+        .pagination-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .pagination-info { font-size: 13px; color: var(--text-muted); }
+        
+        .pagination-buttons { display: flex; gap: 8px; }
+        
+        .pagination-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: #ffffff;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .pagination-btn:hover { background: var(--bg-card-hover); }
+        .pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        /* Search Box */
+        .search-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 10px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+        }
+        
+        .search-input:focus { border-color: var(--accent-blue); outline: none; }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--accent-blue);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .filter-btn:hover { opacity: 0.9; }
         
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             color: var(--text-muted);
         }
         
-        .empty-state i {
-            font-size: 48px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
+        .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
         
         /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 3px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
-        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
         
         /* Responsive */
         @media (max-width: 1400px) {
-            .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .content-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        @media (max-width: 1200px) {
-            .sidebar {
-                width: 80px;
-                padding: 16px;
-            }
-            .logo-text, .nav-section-title, .nav-item span, .nav-item .badge {
-                display: none;
-            }
-            .nav-item {
-                justify-content: center;
-                padding: 12px;
-            }
-            .main-content {
-                margin-left: 80px;
-            }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); }
+            .content-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -668,280 +537,335 @@
         
         <nav class="nav-section">
             <div class="nav-section-title">Principal</div>
-            <a class="nav-item active" href="#">
+            <a class="nav-item active" href="#" onclick="showPage('dashboard')">
                 <i class="bi bi-speedometer2"></i>
                 <span>Dashboard</span>
             </a>
-            <a class="nav-item" href="#">
+            <a class="nav-item" href="#" onclick="showPage('properties')">
                 <i class="bi bi-building"></i>
                 <span>Propriedades</span>
                 <span class="badge" id="navParksCount">-</span>
             </a>
-            <a class="nav-item" href="#">
+            <a class="nav-item" href="#" onclick="showPage('owners')">
                 <i class="bi bi-people"></i>
                 <span>Proprietários</span>
+                <span class="badge" id="navOwnersCount">-</span>
             </a>
         </nav>
         
         <nav class="nav-section">
             <div class="nav-section-title">Dados</div>
-            <a class="nav-item" href="#">
+            <a class="nav-item" href="#" onclick="showPage('dashboard')">
                 <i class="bi bi-download"></i>
                 <span>Exportar</span>
             </a>
-            <a class="nav-item" href="#">
-                <i class="bi bi-gear"></i>
-                <span>Configurações</span>
-            </a>
-        </nav>
-        
-        <nav class="nav-section" style="margin-top: auto;">
-            <div class="nav-section-title">Sistema</div>
-            <div class="nav-item" style="font-size: 11px; color: var(--text-muted);">
-                <i class="bi bi-database"></i>
-                <span>PostgreSQL</span>
-            </div>
         </nav>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Header -->
-        <header class="page-header">
-            <h1 class="page-title">Dashboard</h1>
-            <div class="status-badge idle" id="globalStatusBadge">
-                <span class="status-dot"></span>
-                <span id="statusText">Sistema Pronto</span>
-            </div>
-        </header>
         
-        <!-- Task Banner -->
-        <div class="task-banner" id="taskBanner">
-            <div class="task-banner-content">
-                <div class="task-spinner"></div>
-                <div class="task-info">
+        <!-- ======================= DASHBOARD PAGE ======================= -->
+        <section id="page-dashboard" class="page-section active">
+            <header class="page-header">
+                <h1 class="page-title">Dashboard</h1>
+                <div class="status-badge idle" id="globalStatusBadge">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Sistema Pronto</span>
+                </div>
+            </header>
+            
+            <!-- Task Banner -->
+            <div class="task-banner" id="taskBanner">
+                <div class="task-banner-content">
+                    <div class="task-spinner"></div>
                     <div class="task-name" id="taskName">Executando...</div>
                 </div>
+                <div class="task-progress"><div class="task-progress-bar"></div></div>
             </div>
-            <div class="task-progress">
-                <div class="task-progress-bar"></div>
-            </div>
-        </div>
-        
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon blue"><i class="bi bi-database"></i></div>
-                <div class="stat-value" id="statParksRaw">-</div>
-                <div class="stat-label">Parks Raw</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon green"><i class="bi bi-building"></i></div>
-                <div class="stat-value" id="statParksMaster">-</div>
-                <div class="stat-label">Parks Master</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon purple"><i class="bi bi-person-badge"></i></div>
-                <div class="stat-value" id="statOwners">-</div>
-                <div class="stat-label">Proprietários</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon yellow"><i class="bi bi-briefcase"></i></div>
-                <div class="stat-value" id="statCorporate">-</div>
-                <div class="stat-label">Corporativos</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon green"><i class="bi bi-telephone"></i></div>
-                <div class="stat-value" id="statWithPhone">-</div>
-                <div class="stat-label">Com Telefone</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon blue"><i class="bi bi-envelope"></i></div>
-                <div class="stat-value" id="statContacts">-</div>
-                <div class="stat-label">Contatos</div>
-            </div>
-        </div>
-        
-        <!-- Content Grid -->
-        <div class="content-grid">
-            <!-- Pipeline -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="bi bi-play-circle"></i>
-                        Pipeline de Execução
-                    </div>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="bi bi-database"></i></div>
+                    <div class="stat-value" id="statParksRaw">-</div>
+                    <div class="stat-label">Parks Raw</div>
                 </div>
-                <div class="card-body">
-                    <button class="pipeline-btn phase-1" id="btnPhase1" onclick="runPhase('phase1')">
-                        <i class="bi bi-cloud-download"></i>
-                        Fase 1: Ingestão (Google Places)
-                    </button>
-                    <button class="pipeline-btn phase-2" id="btnPhase2" onclick="runPhase('phase2')">
-                        <i class="bi bi-layers"></i>
-                        Fase 2: Deduplicação
-                    </button>
-                    <button class="pipeline-btn phase-3" id="btnPhase3" onclick="runPhase('phase3')">
-                        <i class="bi bi-person-check"></i>
-                        Fase 3: Identificar Proprietários
-                    </button>
-                    <button class="pipeline-btn phase-4" id="btnPhase4" onclick="runPhase('phase4')">
-                        <i class="bi bi-building-check"></i>
-                        Fase 4: Enriquecer Corporativo
-                    </button>
-                    <button class="pipeline-btn phase-5" id="btnPhase5" onclick="runPhase('phase5')">
-                        <i class="bi bi-envelope-paper"></i>
-                        Fase 5: Scraping de Contatos
-                    </button>
-                    
-                    <div style="margin: 16px 0; border-top: 1px solid var(--border-color);"></div>
-                    
-                    <button class="pipeline-btn phase-export" id="btnExport" onclick="runPhase('export')">
-                        <i class="bi bi-file-earmark-spreadsheet"></i>
-                        Exportar CSVs
-                    </button>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="bi bi-building"></i></div>
+                    <div class="stat-value" id="statParksMaster">-</div>
+                    <div class="stat-label">Parks Master</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="bi bi-person-badge"></i></div>
+                    <div class="stat-value" id="statOwners">-</div>
+                    <div class="stat-label">Proprietários</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow"><i class="bi bi-briefcase"></i></div>
+                    <div class="stat-value" id="statCorporate">-</div>
+                    <div class="stat-label">Corporativos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="bi bi-telephone"></i></div>
+                    <div class="stat-value" id="statWithPhone">-</div>
+                    <div class="stat-label">Com Telefone</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="bi bi-envelope"></i></div>
+                    <div class="stat-value" id="statContacts">-</div>
+                    <div class="stat-label">Contatos</div>
                 </div>
             </div>
             
-            <!-- States Filter -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="bi bi-geo-alt"></i>
-                        Estados
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <!-- Pipeline -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="bi bi-play-circle"></i> Pipeline de Execução</div>
                     </div>
-                    <button class="btn btn-sm" style="background: transparent; color: var(--text-muted); border: none;" onclick="toggleAllStates()">
-                        Selecionar Todos
-                    </button>
+                    <div class="card-body">
+                        <button class="pipeline-btn phase-1" id="btnPhase1" onclick="runPhase('phase1')">
+                            <i class="bi bi-cloud-download"></i> Fase 1: Ingestão (Google Places)
+                        </button>
+                        <button class="pipeline-btn phase-2" id="btnPhase2" onclick="runPhase('phase2')">
+                            <i class="bi bi-layers"></i> Fase 2: Deduplicação
+                        </button>
+                        <button class="pipeline-btn phase-3" id="btnPhase3" onclick="runPhase('phase3')">
+                            <i class="bi bi-person-check"></i> Fase 3: Identificar Proprietários
+                        </button>
+                        <button class="pipeline-btn phase-4" id="btnPhase4" onclick="runPhase('phase4')">
+                            <i class="bi bi-building-check"></i> Fase 4: Enriquecer Corporativo
+                        </button>
+                        <button class="pipeline-btn phase-5" id="btnPhase5" onclick="runPhase('phase5')">
+                            <i class="bi bi-envelope-paper"></i> Fase 5: Scraping de Contatos
+                        </button>
+                        <div style="margin: 16px 0; border-top: 1px solid var(--border-color);"></div>
+                        <button class="pipeline-btn phase-export" id="btnExport" onclick="runPhase('export')">
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Exportar CSVs
+                        </button>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="state-grid" id="stateGrid">
-                        <div class="empty-state">
-                            <div class="spinner-border spinner-border-sm" role="status"></div>
-                            <div>Carregando...</div>
+                
+                <!-- States Filter -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="bi bi-geo-alt"></i> Estados</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="state-grid" id="stateGrid">
+                            <div class="empty-state"><div class="spinner-border spinner-border-sm"></div></div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Search Types -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="bi bi-search"></i>
-                        Tipos de Propriedade
+                
+                <!-- Search Types -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="bi bi-search"></i> Tipos de Propriedade</div>
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="search-types">
-                        <div class="search-type selected" data-type="mobile_home_park" onclick="toggleSearchType(this)">
-                            <i class="bi bi-house-door"></i>
-                            <span>Mobile Home Parks</span>
+                    <div class="card-body">
+                        <div class="search-types">
+                            <div class="search-type selected" data-type="mobile_home_park" onclick="toggleSearchType(this)">
+                                <i class="bi bi-house-door"></i><span>Mobile Home Parks</span>
+                            </div>
+                            <div class="search-type selected" data-type="rv_park" onclick="toggleSearchType(this)">
+                                <i class="bi bi-truck"></i><span>RV Parks</span>
+                            </div>
+                            <div class="search-type selected" data-type="campground" onclick="toggleSearchType(this)">
+                                <i class="bi bi-tree"></i><span>Campgrounds</span>
+                            </div>
+                            <div class="search-type" data-type="manufactured" onclick="toggleSearchType(this)">
+                                <i class="bi bi-buildings"></i><span>Manufactured</span>
+                            </div>
                         </div>
-                        <div class="search-type selected" data-type="rv_park" onclick="toggleSearchType(this)">
-                            <i class="bi bi-truck"></i>
-                            <span>RV Parks</span>
-                        </div>
-                        <div class="search-type selected" data-type="campground" onclick="toggleSearchType(this)">
-                            <i class="bi bi-tree"></i>
-                            <span>Campgrounds</span>
-                        </div>
-                        <div class="search-type" data-type="manufactured" onclick="toggleSearchType(this)">
-                            <i class="bi bi-buildings"></i>
-                            <span>Manufactured Housing</span>
-                        </div>
-                    </div>
-                    
-                    <div class="options-group">
-                        <div class="option-item">
-                            <span class="option-label">Limite de registros</span>
-                            <input type="number" class="form-control" id="limitInput" 
-                                   placeholder="Sem limite" min="1" style="width: 120px;">
-                        </div>
-                        <div class="option-item">
-                            <span class="option-label">Pular APIs externas</span>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="skipApis" checked>
+                        <div class="options-group">
+                            <div class="option-item">
+                                <span class="option-label">Limite de registros</span>
+                                <input type="number" class="form-control" id="limitInput" placeholder="Sem limite" style="width: 120px;">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Bottom Grid -->
-        <div class="content-grid" style="grid-template-columns: 2fr 1fr;">
-            <!-- Logs -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="bi bi-terminal"></i>
-                        Logs de Execução
+            
+            <!-- Bottom Grid -->
+            <div class="content-grid" style="grid-template-columns: 2fr 1fr;">
+                <!-- Logs -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="bi bi-terminal"></i> Logs de Execução</div>
+                        <button style="background: transparent; color: var(--text-muted); border: none; cursor: pointer;" onclick="clearLogs()">
+                            <i class="bi bi-trash"></i> Limpar
+                        </button>
                     </div>
-                    <button class="btn btn-sm" style="background: transparent; color: var(--text-muted); border: none;" onclick="clearLogs()">
-                        <i class="bi bi-trash"></i> Limpar
-                    </button>
-                </div>
-                <div class="card-body" style="padding: 12px;">
-                    <div class="log-container" id="logContainer">
-                        <div class="empty-state" style="padding: 60px 20px;">
-                            <i class="bi bi-journal-text"></i>
-                            <div>Aguardando execução...</div>
+                    <div class="card-body" style="padding: 12px;">
+                        <div class="log-container" id="logContainer">
+                            <div class="empty-state"><i class="bi bi-journal-text"></i><div>Aguardando execução...</div></div>
                         </div>
                     </div>
                 </div>
+                
+                <!-- State Distribution -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="bi bi-bar-chart"></i> Distribuição por Estado</div>
+                    </div>
+                    <div class="card-body" id="stateDistribution">
+                        <div class="empty-state"><div class="spinner-border spinner-border-sm"></div></div>
+                    </div>
+                </div>
             </div>
+        </section>
+        
+        <!-- ======================= PROPERTIES PAGE ======================= -->
+        <section id="page-properties" class="page-section">
+            <header class="page-header">
+                <h1 class="page-title">Propriedades</h1>
+                <div class="status-badge idle">
+                    <span id="propertiesCount">0</span> registros
+                </div>
+            </header>
             
-            <!-- State Distribution -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">
-                        <i class="bi bi-bar-chart"></i>
-                        Distribuição por Estado
+                    <div class="search-box" style="margin: 0; flex: 1;">
+                        <input type="text" class="search-input" id="propertySearch" placeholder="Buscar por nome, cidade ou estado...">
+                        <button class="filter-btn" onclick="loadProperties()"><i class="bi bi-search"></i> Buscar</button>
                     </div>
                 </div>
-                <div class="card-body" id="stateDistribution">
-                    <div class="empty-state">
-                        <div class="spinner-border spinner-border-sm" role="status"></div>
-                        <div>Carregando...</div>
+                <div class="card-body" style="padding: 0; overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Cidade</th>
+                                <th>Estado</th>
+                                <th>Telefone</th>
+                                <th>Website</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="propertiesTableBody">
+                            <tr><td colspan="6" class="empty-state">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls">
+                    <div class="pagination-info">
+                        Mostrando <span id="propStart">0</span>-<span id="propEnd">0</span> de <span id="propTotal">0</span>
+                    </div>
+                    <div class="pagination-buttons">
+                        <button class="pagination-btn" id="propPrevBtn" onclick="prevPropertiesPage()" disabled>
+                            <i class="bi bi-chevron-left"></i> Anterior
+                        </button>
+                        <button class="pagination-btn" id="propNextBtn" onclick="nextPropertiesPage()">
+                            Próximo <i class="bi bi-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+        
+        <!-- ======================= OWNERS PAGE ======================= -->
+        <section id="page-owners" class="page-section">
+            <header class="page-header">
+                <h1 class="page-title">Proprietários</h1>
+                <div class="status-badge idle">
+                    <span id="ownersCount">0</span> registros
+                </div>
+            </header>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="search-box" style="margin: 0; flex: 1;">
+                        <input type="text" class="search-input" id="ownerSearch" placeholder="Buscar por nome...">
+                        <button class="filter-btn" onclick="loadOwners()"><i class="bi bi-search"></i> Buscar</button>
+                    </div>
+                </div>
+                <div class="card-body" style="padding: 0; overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Tipo</th>
+                                <th>Propriedades</th>
+                                <th>Fonte</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ownersTableBody">
+                            <tr><td colspan="4" class="empty-state">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-controls">
+                    <div class="pagination-info">
+                        Mostrando <span id="ownerStart">0</span>-<span id="ownerEnd">0</span> de <span id="ownerTotal">0</span>
+                    </div>
+                    <div class="pagination-buttons">
+                        <button class="pagination-btn" id="ownerPrevBtn" onclick="prevOwnersPage()" disabled>
+                            <i class="bi bi-chevron-left"></i> Anterior
+                        </button>
+                        <button class="pagination-btn" id="ownerNextBtn" onclick="nextOwnersPage()">
+                            Próximo <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
     </main>
 
     <script>
         // Estado da aplicação
+        let currentPage = 'dashboard';
         let selectedStates = ['IN'];
         let selectedTypes = ['mobile_home_park', 'rv_park', 'campground'];
         let isRunning = false;
-        let lastStats = null;
-
-        // Cores para estados
-        const stateColors = [
-            '#3b82f6', '#22c55e', '#a855f7', '#eab308', '#ef4444',
-            '#ec4899', '#06b6d4', '#f97316', '#84cc16', '#6366f1'
-        ];
+        
+        // Paginação
+        let propertiesPage = 1;
+        let ownersPage = 1;
+        const pageSize = 50;
+        let propertiesData = [];
+        let ownersData = [];
+        
+        const stateColors = ['#3b82f6', '#22c55e', '#a855f7', '#eab308', '#ef4444', '#ec4899', '#06b6d4', '#f97316'];
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             loadStats();
             loadStates();
-            
-            // Atualizar stats a cada 30 segundos
             setInterval(loadStats, 30000);
-            
-            // Atualizar logs a cada 5 segundos
             setInterval(loadLogs, 5000);
-            
-            // Verificar status do pipeline a cada 10 segundos
             setInterval(checkPipelineStatus, 10000);
         });
 
-        function formatNumber(num) {
-            if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'k';
+        // Navegação entre páginas
+        function showPage(page) {
+            currentPage = page;
+            
+            // Esconder todas as páginas
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            
+            // Mostrar página selecionada
+            document.getElementById('page-' + page).classList.add('active');
+            
+            // Atualizar navegação
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Carregar dados da página
+            if (page === 'properties') {
+                loadProperties();
+            } else if (page === 'owners') {
+                loadOwners();
             }
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
             return num?.toLocaleString() || '0';
         }
 
@@ -949,12 +873,7 @@
             fetch('/api/stats')
                 .then(r => r.json())
                 .then(data => {
-                    if (data.error) {
-                        console.error('Erro ao carregar stats:', data.error);
-                        return;
-                    }
-                    
-                    lastStats = data;
+                    if (data.error) return;
                     
                     document.getElementById('statParksRaw').textContent = formatNumber(data.parks_raw);
                     document.getElementById('statParksMaster').textContent = formatNumber(data.parks_master);
@@ -963,10 +882,9 @@
                     document.getElementById('statWithPhone').textContent = formatNumber(data.with_phone);
                     document.getElementById('statContacts').textContent = formatNumber(data.contacts);
                     
-                    // Nav badge
                     document.getElementById('navParksCount').textContent = formatNumber(data.parks_master);
+                    document.getElementById('navOwnersCount').textContent = formatNumber(data.owners);
                     
-                    // Distribuição por estado
                     if (data.by_state && Object.keys(data.by_state).length > 0) {
                         updateStateDistribution(data.by_state);
                     }
@@ -977,11 +895,8 @@
         function updateStateDistribution(byState) {
             const container = document.getElementById('stateDistribution');
             const total = Object.values(byState).reduce((a, b) => a + b, 0);
-            
             let html = '';
             let i = 0;
-            
-            // Ordenar por contagem
             const sorted = Object.entries(byState).sort((a, b) => b[1] - a[1]);
             
             for (const [state, count] of sorted.slice(0, 8)) {
@@ -998,7 +913,6 @@
                 `;
                 i++;
             }
-            
             container.innerHTML = html || '<div class="empty-state">Sem dados</div>';
         }
 
@@ -1007,82 +921,143 @@
                 .then(r => r.json())
                 .then(states => {
                     const container = document.getElementById('stateGrid');
-                    
                     if (states.length === 0) {
-                        container.innerHTML = '<div class="empty-state">Nenhum estado encontrado</div>';
+                        container.innerHTML = '<div class="empty-state">Nenhum estado</div>';
                         return;
                     }
-                    
                     let html = '';
                     for (const state of states) {
                         const checked = selectedStates.includes(state.code) ? 'checked' : '';
                         html += `
                             <div class="state-item">
-                                <input type="checkbox" id="state_${state.code}" value="${state.code}" 
-                                       ${checked} onchange="toggleState('${state.code}')">
-                                <label for="state_${state.code}">
-                                    ${state.code}
-                                    <span class="state-count">${state.count}</span>
-                                </label>
+                                <input type="checkbox" id="state_${state.code}" value="${state.code}" ${checked} onchange="toggleState('${state.code}')">
+                                <label for="state_${state.code}">${state.code} <span class="state-count">${state.count}</span></label>
                             </div>
                         `;
                     }
                     container.innerHTML = html;
-                })
-                .catch(e => {
-                    document.getElementById('stateGrid').innerHTML = 
-                        '<div class="empty-state" style="color: var(--accent-red);">Erro ao carregar</div>';
                 });
         }
 
         function toggleState(stateCode) {
             const idx = selectedStates.indexOf(stateCode);
-            if (idx > -1) {
-                selectedStates.splice(idx, 1);
-            } else {
-                selectedStates.push(stateCode);
-            }
-        }
-
-        function toggleAllStates() {
-            const checkboxes = document.querySelectorAll('#stateGrid input[type="checkbox"]');
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            
-            checkboxes.forEach(cb => {
-                cb.checked = !allChecked;
-                const stateCode = cb.value;
-                const idx = selectedStates.indexOf(stateCode);
-                
-                if (!allChecked && idx === -1) {
-                    selectedStates.push(stateCode);
-                } else if (allChecked && idx > -1) {
-                    selectedStates.splice(idx, 1);
-                }
-            });
+            if (idx > -1) selectedStates.splice(idx, 1);
+            else selectedStates.push(stateCode);
         }
 
         function toggleSearchType(el) {
             el.classList.toggle('selected');
-            const type = el.dataset.type;
-            const idx = selectedTypes.indexOf(type);
-            if (idx > -1) {
-                selectedTypes.splice(idx, 1);
-            } else {
-                selectedTypes.push(type);
-            }
         }
 
-        function runPhase(phase) {
-            if (isRunning) {
-                alert('Já existe uma fase em execução. Aguarde a conclusão.');
+        // ======================= PROPERTIES =======================
+        function loadProperties() {
+            const search = document.getElementById('propertySearch')?.value || '';
+            fetch(`/api/properties?page=${propertiesPage}&limit=${pageSize}&search=${encodeURIComponent(search)}`)
+                .then(r => r.json())
+                .then(data => {
+                    propertiesData = data.items || [];
+                    const total = data.total || 0;
+                    
+                    document.getElementById('propertiesCount').textContent = total.toLocaleString();
+                    document.getElementById('propTotal').textContent = total;
+                    document.getElementById('propStart').textContent = total > 0 ? (propertiesPage - 1) * pageSize + 1 : 0;
+                    document.getElementById('propEnd').textContent = Math.min(propertiesPage * pageSize, total);
+                    
+                    document.getElementById('propPrevBtn').disabled = propertiesPage <= 1;
+                    document.getElementById('propNextBtn').disabled = propertiesPage * pageSize >= total;
+                    
+                    renderPropertiesTable();
+                })
+                .catch(e => {
+                    document.getElementById('propertiesTableBody').innerHTML = '<tr><td colspan="6" class="empty-state">Erro ao carregar</td></tr>';
+                });
+        }
+
+        function renderPropertiesTable() {
+            const tbody = document.getElementById('propertiesTableBody');
+            if (propertiesData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Nenhuma propriedade encontrada</td></tr>';
                 return;
             }
+            
+            let html = '';
+            for (const p of propertiesData) {
+                const hasPhone = p.phone ? '<span class="badge badge-success">Sim</span>' : '<span class="badge badge-warning">Não</span>';
+                const website = p.website ? `<a href="${p.website}" target="_blank" style="color: var(--accent-blue);">Acessar</a>` : '-';
+                html += `
+                    <tr>
+                        <td><strong>${p.name || '-'}</strong></td>
+                        <td>${p.city || '-'}</td>
+                        <td>${p.state || '-'}</td>
+                        <td>${p.phone || '-'}</td>
+                        <td>${website}</td>
+                        <td>${hasPhone}</td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function prevPropertiesPage() { if (propertiesPage > 1) { propertiesPage--; loadProperties(); } }
+        function nextPropertiesPage() { propertiesPage++; loadProperties(); }
+
+        // ======================= OWNERS =======================
+        function loadOwners() {
+            const search = document.getElementById('ownerSearch')?.value || '';
+            fetch(`/api/owners?page=${ownersPage}&limit=${pageSize}&search=${encodeURIComponent(search)}`)
+                .then(r => r.json())
+                .then(data => {
+                    ownersData = data.items || [];
+                    const total = data.total || 0;
+                    
+                    document.getElementById('ownersCount').textContent = total.toLocaleString();
+                    document.getElementById('ownerTotal').textContent = total;
+                    document.getElementById('ownerStart').textContent = total > 0 ? (ownersPage - 1) * pageSize + 1 : 0;
+                    document.getElementById('ownerEnd').textContent = Math.min(ownersPage * pageSize, total);
+                    
+                    document.getElementById('ownerPrevBtn').disabled = ownersPage <= 1;
+                    document.getElementById('ownerNextBtn').disabled = ownersPage * pageSize >= total;
+                    
+                    renderOwnersTable();
+                })
+                .catch(e => {
+                    document.getElementById('ownersTableBody').innerHTML = '<tr><td colspan="4" class="empty-state">Erro ao carregar</td></tr>';
+                });
+        }
+
+        function renderOwnersTable() {
+            const tbody = document.getElementById('ownersTableBody');
+            if (ownersData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Nenhum proprietário encontrado</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            for (const o of ownersData) {
+                const tipo = o.is_corporate ? '<span class="badge badge-info">Corporativo</span>' : '<span class="badge badge-success">Individual</span>';
+                html += `
+                    <tr>
+                        <td><strong>${o.name || '-'}</strong></td>
+                        <td>${tipo}</td>
+                        <td>${o.property_count || 1}</td>
+                        <td>${o.source || 'park_name'}</td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function prevOwnersPage() { if (ownersPage > 1) { ownersPage--; loadOwners(); } }
+        function nextOwnersPage() { ownersPage++; loadOwners(); }
+
+        // ======================= PIPELINE =======================
+        function runPhase(phase) {
+            if (isRunning) { alert('Já existe uma fase em execução.'); return; }
             
             const options = {
                 states: selectedStates,
                 types: selectedTypes,
-                limit: document.getElementById('limitInput').value || null,
-                skipApis: document.getElementById('skipApis').checked,
+                limit: document.getElementById('limitInput')?.value || null,
             };
             
             fetch('/api/pipeline/run', {
@@ -1092,14 +1067,9 @@
             })
             .then(r => r.json())
             .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    checkPipelineStatus();
-                    loadLogs();
-                }
-            })
-            .catch(e => alert('Erro ao iniciar: ' + e));
+                if (data.error) alert(data.error);
+                else { checkPipelineStatus(); loadLogs(); }
+            });
         }
 
         function checkPipelineStatus() {
@@ -1109,7 +1079,6 @@
                     const running = status.phase1_running || status.phase2_running || 
                                    status.phase3_running || status.phase4_running ||
                                    status.phase5_running || status.export_running;
-                    
                     isRunning = running;
                     
                     const badge = document.getElementById('globalStatusBadge');
@@ -1128,23 +1097,10 @@
                         taskBanner.classList.remove('active');
                     }
                     
-                    // Atualizar estado dos botões
-                    const phases = {
-                        'btnPhase1': status.phase1_running,
-                        'btnPhase2': status.phase2_running,
-                        'btnPhase3': status.phase3_running,
-                        'btnPhase4': status.phase4_running,
-                        'btnPhase5': status.phase5_running,
-                        'btnExport': status.export_running
-                    };
-                    
-                    for (const [id, isPhaseRunning] of Object.entries(phases)) {
-                        const btn = document.getElementById(id);
-                        btn.disabled = running;
-                        btn.classList.toggle('running', isPhaseRunning);
-                    }
-                })
-                .catch(e => console.error('Erro ao verificar status:', e));
+                    ['btnPhase1', 'btnPhase2', 'btnPhase3', 'btnPhase4', 'btnPhase5', 'btnExport'].forEach(id => {
+                        document.getElementById(id).disabled = running;
+                    });
+                });
         }
 
         function loadLogs() {
@@ -1152,36 +1108,21 @@
                 .then(r => r.json())
                 .then(logs => {
                     const container = document.getElementById('logContainer');
-                    
                     if (logs.length === 0) {
-                        container.innerHTML = `
-                            <div class="empty-state" style="padding: 60px 20px;">
-                                <i class="bi bi-journal-text"></i>
-                                <div>Aguardando execução...</div>
-                            </div>
-                        `;
+                        container.innerHTML = '<div class="empty-state"><i class="bi bi-journal-text"></i><div>Aguardando execução...</div></div>';
                         return;
                     }
-                    
                     let html = '';
                     for (const log of logs) {
-                        html += `
-                            <div class="log-entry ${log.level}">
-                                <span class="log-time">${log.time}</span>
-                                <span>${log.message}</span>
-                            </div>
-                        `;
+                        html += `<div class="log-entry ${log.level}"><span class="log-time">${log.time}</span><span>${log.message}</span></div>`;
                     }
-                    
                     container.innerHTML = html;
                     container.scrollTop = container.scrollHeight;
-                })
-                .catch(e => console.error('Erro ao carregar logs:', e));
+                });
         }
 
         function clearLogs() {
-            fetch('/api/clear-logs', { method: 'POST' })
-                .then(() => loadLogs());
+            fetch('/api/clear-logs', { method: 'POST' }).then(() => loadLogs());
         }
     </script>
 </body>

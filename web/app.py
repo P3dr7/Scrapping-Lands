@@ -493,6 +493,121 @@ def run_export(options):
             pipeline_state['current_task'] = None
 
 
+@app.route('/api/properties')
+def api_properties():
+    """Retorna lista de propriedades com paginação."""
+    try:
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 50))
+        search = request.args.get('search', '').strip()
+        
+        offset = (page - 1) * limit
+        
+        engine = get_cached_engine()
+        with engine.connect() as conn:
+            # Query base
+            base_where = "1=1"
+            params = {'limit': limit, 'offset': offset}
+            
+            if search:
+                base_where = "(LOWER(name) LIKE :search OR LOWER(city) LIKE :search OR LOWER(state) LIKE :search)"
+                params['search'] = f'%{search.lower()}%'
+            
+            # Total
+            count_sql = f"SELECT COUNT(*) FROM parks_master WHERE {base_where}"
+            total = conn.execute(text(count_sql), params).scalar() or 0
+            
+            # Dados - usando colunas corretas: latitude/longitude
+            data_sql = f"""
+                SELECT id, name, city, state, phone, website, address, latitude, longitude
+                FROM parks_master 
+                WHERE {base_where}
+                ORDER BY name ASC
+                LIMIT :limit OFFSET :offset
+            """
+            rows = conn.execute(text(data_sql), params).fetchall()
+            
+            items = []
+            for row in rows:
+                items.append({
+                    'id': row[0],
+                    'name': row[1],
+                    'city': row[2],
+                    'state': row[3],
+                    'phone': row[4],
+                    'website': row[5],
+                    'address': row[6],
+                    'lat': float(row[7]) if row[7] else None,
+                    'lon': float(row[8]) if row[8] else None,
+                })
+            
+            return jsonify({
+                'items': items,
+                'total': total,
+                'page': page,
+                'pages': (total + limit - 1) // limit,
+            })
+    except Exception as e:
+        return jsonify({'items': [], 'total': 0, 'error': str(e)})
+
+
+@app.route('/api/owners')
+def api_owners():
+    """Retorna lista de proprietários com paginação."""
+    try:
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 50))
+        search = request.args.get('search', '').strip()
+        
+        offset = (page - 1) * limit
+        
+        engine = get_cached_engine()
+        with engine.connect() as conn:
+            # Query base - usando full_name (coluna correta)
+            base_where = "1=1"
+            params = {'limit': limit, 'offset': offset}
+            
+            if search:
+                base_where = "LOWER(full_name) LIKE :search"
+                params['search'] = f'%{search.lower()}%'
+            
+            # Total
+            count_sql = f"SELECT COUNT(*) FROM owners WHERE {base_where}"
+            total = conn.execute(text(count_sql), params).scalar() or 0
+            
+            # Dados - usando full_name e is_individual (colunas corretas)
+            # Contagem de propriedades via parks_master.owner_id
+            data_sql = f"""
+                SELECT 
+                    o.id, o.full_name, o.is_individual, o.source,
+                    (SELECT COUNT(*) FROM parks_master pm WHERE pm.owner_id = o.id) as property_count
+                FROM owners o
+                WHERE {base_where}
+                ORDER BY o.full_name ASC
+                LIMIT :limit OFFSET :offset
+            """
+            rows = conn.execute(text(data_sql), params).fetchall()
+            
+            items = []
+            for row in rows:
+                items.append({
+                    'id': row[0],
+                    'name': row[1],
+                    'is_corporate': not row[2] if row[2] is not None else False,  # is_individual inverso
+                    'source': row[3],
+                    'property_count': row[4] or 1,
+                })
+            
+            return jsonify({
+                'items': items,
+                'total': total,
+                'page': page,
+                'pages': (total + limit - 1) // limit,
+            })
+    except Exception as e:
+        return jsonify({'items': [], 'total': 0, 'error': str(e)})
+
+
 @app.route('/api/logs')
 def api_logs():
     """Retorna logs recentes."""
