@@ -6,26 +6,34 @@ Dashboard para visualização de dados de MHP/RV Parks.
 
 import os
 import sys
-from datetime import datetime
-from flask import Flask, render_template, jsonify, request
 
-# Adiciona o diretório raiz ao path
+# Configuração de caminhos ANTES de importar Flask
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(current_dir)
 sys.path.insert(0, root_dir)
 
+from flask import Flask, render_template, jsonify, request
 from sqlalchemy import create_engine, text
-from dotenv import load_dotenv
-
-# Carregar variáveis de ambiente
-load_dotenv()
 
 # Configuração Flask para Vercel
+template_path = os.path.join(root_dir, 'web', 'templates')
+static_path = os.path.join(root_dir, 'web', 'static')
+
+# Verificar se os diretórios existem
+if not os.path.exists(template_path):
+    template_path = None
+if not os.path.exists(static_path):
+    static_path = None
+
 app = Flask(__name__, 
-    template_folder=os.path.join(root_dir, 'web', 'templates'),
-    static_folder=os.path.join(root_dir, 'web', 'static')
+    template_folder=template_path,
+    static_folder=static_path
 )
 app.secret_key = os.getenv('SECRET_KEY', 'bellaterra-secret-key-2025')
+
+# Desabilitar debug em produção
+app.config['DEBUG'] = False
+app.config['PROPAGATE_EXCEPTIONS'] = True
 
 # Cache do engine
 _engine_cache = None
@@ -363,10 +371,8 @@ def api_clear_logs():
     return jsonify({'status': 'ok'})
 
 
-# Handler para Vercel
-def handler(event, context):
-    return app(event, context)
-
+# Handler para Vercel - WSGI application
+app = app
 
 # Para rodar localmente
 if __name__ == '__main__':
