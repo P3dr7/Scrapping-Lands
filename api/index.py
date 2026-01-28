@@ -51,14 +51,23 @@ def get_engine():
         if not all([host, database, user, password]):
             raise ValueError("Database credentials not configured. Please set DB_HOST, DB_NAME, DB_USER, and DB_PASSWORD environment variables in Vercel.")
         
-        connection_string = f"postgresql://{user}:{password}@{host}:{port}/{database}"
+        # Supabase requires SSL and specific connection settings
+        connection_string = f"postgresql://{user}:{password}@{host}:{port}/{database}?sslmode=require"
         _engine_cache = create_engine(
             connection_string, 
             pool_pre_ping=True,
             pool_recycle=300,
+            pool_size=5,
+            max_overflow=10,
+            pool_timeout=30,
             connect_args={
-                "connect_timeout": 10,
-                "application_name": "bellaterra_vercel"
+                "connect_timeout": 30,
+                "application_name": "bellaterra_vercel",
+                "sslmode": "require",
+                "keepalives": 1,
+                "keepalives_idle": 30,
+                "keepalives_interval": 10,
+                "keepalives_count": 5
             }
         )
     return _engine_cache
