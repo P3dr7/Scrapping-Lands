@@ -536,14 +536,14 @@
         </div>
         
         <nav class="nav-section">
-            <div class="nav-section-title">Principal</div>
+            <div class="nav-section-title">Main</div>
             <a class="nav-item active" href="#" onclick="showPage('dashboard')">
                 <i class="bi bi-speedometer2"></i>
                 <span>Dashboard</span>
             </a>
             <a class="nav-item" href="#" onclick="showPage('properties')">
                 <i class="bi bi-building"></i>
-                <span>Propriedades</span>
+                <span>Properties</span>
                 <span class="badge" id="navParksCount">-</span>
             </a>
             <a class="nav-item" href="#" onclick="showPage('owners')">
@@ -554,10 +554,10 @@
         </nav>
         
         <nav class="nav-section">
-            <div class="nav-section-title">Dados</div>
+            <div class="nav-section-title">Data</div>
             <a class="nav-item" href="#" onclick="showPage('dashboard')">
                 <i class="bi bi-download"></i>
-                <span>Exportar</span>
+                <span>Export</span>
             </a>
         </nav>
     </aside>
@@ -571,7 +571,7 @@
                 <h1 class="page-title">Dashboard</h1>
                 <div class="status-badge idle" id="globalStatusBadge">
                     <span class="status-dot"></span>
-                    <span id="statusText">Sistema Pronto</span>
+                    <span id="statusText">System Ready</span>
                 </div>
             </header>
             
@@ -579,7 +579,7 @@
             <div class="task-banner" id="taskBanner">
                 <div class="task-banner-content">
                     <div class="task-spinner"></div>
-                    <div class="task-name" id="taskName">Executando...</div>
+                    <div class="task-name" id="taskName">Running...</div>
                 </div>
                 <div class="task-progress"><div class="task-progress-bar"></div></div>
             </div>
@@ -609,12 +609,12 @@
                 <div class="stat-card">
                     <div class="stat-icon green"><i class="bi bi-telephone"></i></div>
                     <div class="stat-value" id="statWithPhone">-</div>
-                    <div class="stat-label">Com Telefone</div>
+                    <div class="stat-label">With Phone</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon blue"><i class="bi bi-envelope"></i></div>
                     <div class="stat-value" id="statContacts">-</div>
-                    <div class="stat-label">Contatos</div>
+                    <div class="stat-label">Contacts</div>
                 </div>
             </div>
             
@@ -627,23 +627,23 @@
                     </div>
                     <div class="card-body">
                         <button class="pipeline-btn phase-1" id="btnPhase1" onclick="runPhase('phase1')">
-                            <i class="bi bi-cloud-download"></i> Fase 1: Ingestão (Google Places)
+                            <i class="bi bi-cloud-download"></i> Phase 1: Ingestão (Google Places)
                         </button>
                         <button class="pipeline-btn phase-2" id="btnPhase2" onclick="runPhase('phase2')">
-                            <i class="bi bi-layers"></i> Fase 2: Deduplicação
+                            <i class="bi bi-layers"></i> Phase 2: Deduplicação
                         </button>
                         <button class="pipeline-btn phase-3" id="btnPhase3" onclick="runPhase('phase3')">
-                            <i class="bi bi-person-check"></i> Fase 3: Identificar Proprietários
+                            <i class="bi bi-person-check"></i> Phase 3: Identificar Proprietários
                         </button>
                         <button class="pipeline-btn phase-4" id="btnPhase4" onclick="runPhase('phase4')">
-                            <i class="bi bi-building-check"></i> Fase 4: Enriquecer Corporativo
+                            <i class="bi bi-building-check"></i> Phase 4: Corporate Enrichment
                         </button>
                         <button class="pipeline-btn phase-5" id="btnPhase5" onclick="runPhase('phase5')">
-                            <i class="bi bi-envelope-paper"></i> Fase 5: Scraping de Contatos
+                            <i class="bi bi-envelope-paper"></i> Phase 5: Scraping de Contacts
                         </button>
                         <div style="margin: 16px 0; border-top: 1px solid var(--border-color);"></div>
                         <button class="pipeline-btn phase-export" id="btnExport" onclick="runPhase('export')">
-                            <i class="bi bi-file-earmark-spreadsheet"></i> Exportar CSVs
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Export CSVs
                         </button>
                     </div>
                 </div>
@@ -651,7 +651,7 @@
                 <!-- States Filter -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title"><i class="bi bi-geo-alt"></i> Estados</div>
+                        <div class="card-title"><i class="bi bi-geo-alt"></i> States</div>
                     </div>
                     <div class="card-body">
                         <div class="state-grid" id="stateGrid">
@@ -663,7 +663,7 @@
                 <!-- Search Types -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title"><i class="bi bi-search"></i> Tipos de Propriedade</div>
+                        <div class="card-title"><i class="bi bi-search"></i> Property Types</div>
                     </div>
                     <div class="card-body">
                         <div class="search-types">
@@ -682,8 +682,8 @@
                         </div>
                         <div class="options-group">
                             <div class="option-item">
-                                <span class="option-label">Limite de registros</span>
-                                <input type="number" class="form-control" id="limitInput" placeholder="Sem limite" style="width: 120px;">
+                                <span class="option-label">Record limit</span>
+                                <input type="number" class="form-control" id="limitInput" placeholder="No limit" style="width: 120px;">
                             </div>
                         </div>
                     </div>
@@ -697,7 +697,7 @@
                     <div class="card-header">
                         <div class="card-title"><i class="bi bi-terminal"></i> Logs de Execução</div>
                         <button style="background: transparent; color: var(--text-muted); border: none; cursor: pointer;" onclick="clearLogs()">
-                            <i class="bi bi-trash"></i> Limpar
+                            <i class="bi bi-trash"></i> Clear
                         </button>
                     </div>
                     <div class="card-body" style="padding: 12px;">
@@ -710,7 +710,7 @@
                 <!-- State Distribution -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title"><i class="bi bi-bar-chart"></i> Distribuição por Estado</div>
+                        <div class="card-title"><i class="bi bi-bar-chart"></i> Distribuição por State</div>
                     </div>
                     <div class="card-body" id="stateDistribution">
                         <div class="empty-state"><div class="spinner-border spinner-border-sm"></div></div>
@@ -722,43 +722,43 @@
         <!-- ======================= PROPERTIES PAGE ======================= -->
         <section id="page-properties" class="page-section">
             <header class="page-header">
-                <h1 class="page-title">Propriedades</h1>
+                <h1 class="page-title">Properties</h1>
                 <div class="status-badge idle">
-                    <span id="propertiesCount">0</span> registros
+                    <span id="propertiesCount">0</span> records
                 </div>
             </header>
             
             <div class="card">
                 <div class="card-header">
                     <div class="search-box" style="margin: 0; flex: 1;">
-                        <input type="text" class="search-input" id="propertySearch" placeholder="Buscar por nome, cidade ou estado...">
-                        <button class="filter-btn" onclick="loadProperties()"><i class="bi bi-search"></i> Buscar</button>
+                        <input type="text" class="search-input" id="propertySearch" placeholder="Search by name, city or state...">
+                        <button class="filter-btn" onclick="loadProperties()"><i class="bi bi-search"></i> Search</button>
                     </div>
                 </div>
                 <div class="card-body" style="padding: 0; overflow-x: auto;">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Cidade</th>
-                                <th>Estado</th>
-                                <th>Telefone</th>
+                                <th>Name</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Phone</th>
                                 <th>Website</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody id="propertiesTableBody">
-                            <tr><td colspan="6" class="empty-state">Carregando...</td></tr>
+                            <tr><td colspan="6" class="empty-state">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="pagination-controls">
                     <div class="pagination-info">
-                        Mostrando <span id="propStart">0</span>-<span id="propEnd">0</span> de <span id="propTotal">0</span>
+                        Showing <span id="propStart">0</span>-<span id="propEnd">0</span> de <span id="propTotal">0</span>
                     </div>
                     <div class="pagination-buttons">
                         <button class="pagination-btn" id="propPrevBtn" onclick="prevPropertiesPage()" disabled>
-                            <i class="bi bi-chevron-left"></i> Anterior
+                            <i class="bi bi-chevron-left"></i> Previous
                         </button>
                         <button class="pagination-btn" id="propNextBtn" onclick="nextPropertiesPage()">
                             Próximo <i class="bi bi-chevron-right"></i>
@@ -773,39 +773,39 @@
             <header class="page-header">
                 <h1 class="page-title">Proprietários</h1>
                 <div class="status-badge idle">
-                    <span id="ownersCount">0</span> registros
+                    <span id="ownersCount">0</span> records
                 </div>
             </header>
             
             <div class="card">
                 <div class="card-header">
                     <div class="search-box" style="margin: 0; flex: 1;">
-                        <input type="text" class="search-input" id="ownerSearch" placeholder="Buscar por nome...">
-                        <button class="filter-btn" onclick="loadOwners()"><i class="bi bi-search"></i> Buscar</button>
+                        <input type="text" class="search-input" id="ownerSearch" placeholder="Search por nome...">
+                        <button class="filter-btn" onclick="loadOwners()"><i class="bi bi-search"></i> Search</button>
                     </div>
                 </div>
                 <div class="card-body" style="padding: 0; overflow-x: auto;">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Tipo</th>
-                                <th>Propriedades</th>
-                                <th>Fonte</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Properties</th>
+                                <th>Source</th>
                             </tr>
                         </thead>
                         <tbody id="ownersTableBody">
-                            <tr><td colspan="4" class="empty-state">Carregando...</td></tr>
+                            <tr><td colspan="4" class="empty-state">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="pagination-controls">
                     <div class="pagination-info">
-                        Mostrando <span id="ownerStart">0</span>-<span id="ownerEnd">0</span> de <span id="ownerTotal">0</span>
+                        Showing <span id="ownerStart">0</span>-<span id="ownerEnd">0</span> de <span id="ownerTotal">0</span>
                     </div>
                     <div class="pagination-buttons">
                         <button class="pagination-btn" id="ownerPrevBtn" onclick="prevOwnersPage()" disabled>
-                            <i class="bi bi-chevron-left"></i> Anterior
+                            <i class="bi bi-chevron-left"></i> Previous
                         </button>
                         <button class="pagination-btn" id="ownerNextBtn" onclick="nextOwnersPage()">
                             Próximo <i class="bi bi-chevron-right"></i>
@@ -818,7 +818,7 @@
     </main>
 
     <script>
-        // Estado da aplicação
+        // State da aplicação
         let currentPage = 'dashboard';
         let selectedStates = ['IN'];
         let selectedTypes = ['mobile_home_park', 'rv_park', 'campground'];
@@ -1113,12 +1113,12 @@
                     
                     if (running) {
                         badge.className = 'status-badge running';
-                        statusText.textContent = 'Executando...';
+                        statusText.textContent = 'Running...';
                         taskBanner.classList.add('active');
                         taskName.textContent = status.current_task || 'Processando...';
                     } else {
                         badge.className = 'status-badge idle';
-                        statusText.textContent = 'Sistema Pronto';
+                        statusText.textContent = 'System Ready';
                         taskBanner.classList.remove('active');
                     }
                     
