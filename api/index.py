@@ -39,22 +39,33 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 _engine_cache = None
 
 def get_engine():
-    """Cria engine de conexão com banco PostgreSQL."""
+    """Creates PostgreSQL database engine."""
     global _engine_cache
     if _engine_cache is None:
-        host = os.getenv("DB_HOST", "localhost")
+        host = os.getenv("DB_HOST")
         port = os.getenv("DB_PORT", "5432")
-        database = os.getenv("DB_NAME", "mhp_intelligence")
-        user = os.getenv("DB_USER", "postgres")
-        password = os.getenv("DB_PASSWORD", "")
+        database = os.getenv("DB_NAME")
+        user = os.getenv("DB_USER")
+        password = os.getenv("DB_PASSWORD")
+        
+        if not all([host, database, user, password]):
+            raise ValueError("Database credentials not configured. Please set DB_HOST, DB_NAME, DB_USER, and DB_PASSWORD environment variables in Vercel.")
         
         connection_string = f"postgresql://{user}:{password}@{host}:{port}/{database}"
-        _engine_cache = create_engine(connection_string, pool_pre_ping=True)
+        _engine_cache = create_engine(
+            connection_string, 
+            pool_pre_ping=True,
+            pool_recycle=300,
+            connect_args={
+                "connect_timeout": 10,
+                "application_name": "bellaterra_vercel"
+            }
+        )
     return _engine_cache
 
 
 def get_db_stats():
-    """Retorna estatísticas do banco de dados."""
+    """Returns database statistics."""
     try:
         engine = get_engine()
         with engine.connect() as conn:
@@ -146,10 +157,14 @@ def get_db_stats():
                 stats['contacts_with_email'] = 0
             
             return stats
-    except Exception as e:
-        return {'error': str(e), 'parks_raw': 0, 'parks_master': 0, 'by_state': {}, 
+    except ValueError as ve:
+        return {'error': str(ve), 'db_configured': False, 'parks_raw': 0, 'parks_master': 0, 'by_state': {}, 
                 'with_website': 0, 'with_phone': 0, 'owners': 0, 'corporate_owners': 0,
                 'companies': 0, 'contacts': 0, 'contacts_with_email': 0}
+    except Exception as e:
+        return {'error': f'Database connection error: {str(e)}', 'db_configured': True, 'parks_raw': 0, 'parks_master': 0, 'by_state': {}, 
+                'with_website': 0, 'with_phone': 0, 'owners': 0, 'corporate_owners': 0,
+          urns list of available state: 0, 'contacts_with_email': 0}
 
 
 def get_states_list():
@@ -166,7 +181,7 @@ def get_states_list():
             """))
             return [{'code': row[0], 'count': row[1]} for row in r]
     except Exception:
-        return []
+        reurns list of counties for a state
 
 
 def get_counties_for_state(state_code: str):
@@ -188,31 +203,57 @@ def get_counties_for_state(state_code: str):
 
 # ============================================================================
 # ROTAS
-# ============================================================================
-
-@app.route('/')
-def index():
-    """Página principal."""
+# =====Main dashboard page."""
     return render_template('dashboard.html')
 
 
-@app.route('/api/stats')
-def api_stats():
-    """Retorna estatísticas do banco."""
-    stats = get_db_stats()
-    return jsonify(stats)
-
-
-@app.route('/api/states')
-def api_states():
-    """Retorna lista de estados."""
-    states = get_states_list()
+@app.route('/health')
+def health():
+    """Heaurns database statistics
+    try:
+        engine = get_engine()
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        return jsonify({
+            'status': 'healthy',
+            'database': 'connected',
+            'db_host': os.getenv('DB_HOST', 'not configured')
+        })
+    except ValueError as ve:
+        reurns list of state
+            'status': 'error',
+            'database': 'not configured',
+            'message': str(ve)
+        }), 500
+    except Exception as e:
+        return jsonify({
+          urns counties for a state
+            'database': 'connection failed',
+            'message': str(e)
+        }), 500
+@app.route('/')
+def index():
+    """Página principal."""
+    returnurns pipeline status - always idle on Vercel."""
+    return jsonify({
+        'phase1_running': False,
+        'phase2_running': False,
+        'phase3_running': False,
+        'phase4_running': False,
+        'phase5_running': False,
+        'export_running': False,
+        'current_task': None,
+        'progress': 0,
+        'logs': [],
+        'last_update': None,
+        'vercel_mode': True,
+        'message': 'Pipeline not available in Vercel mode. Run locally to execute
     return jsonify(states)
 
 
 @app.route('/api/counties/<state_code>')
 def api_counties(state_code):
-    """Retorna condados de um estado."""
+    """Retorna coot available onado."""
     counties = get_counties_for_state(state_code)
     return jsonify(counties)
 
@@ -221,7 +262,7 @@ def api_counties(state_code):
 def api_pipeline_status():
     """Retorna status do pipeline - sempre idle no Vercel."""
     return jsonify({
-        'phase1_running': False,
+        'purns list of properties with pagination
         'phase2_running': False,
         'phase3_running': False,
         'phase4_running': False,
@@ -305,7 +346,7 @@ def api_properties():
 
 @app.route('/api/owners')
 def api_owners():
-    """Retorna lista de proprietários com paginação."""
+    """Returns list of owners with pagination."""
     try:
         page = int(request.args.get('page', 1))
         limit = int(request.args.get('limit', 50))
@@ -361,13 +402,13 @@ def api_owners():
 
 @app.route('/api/logs')
 def api_logs():
-    """Retorna logs recentes - vazio no Vercel."""
+    """Returns recent logs - empty on Vercel."""
     return jsonify([])
 
 
 @app.route('/api/clear-logs', methods=['POST'])
 def api_clear_logs():
-    """Limpa os logs."""
+    """Clears logs."""
     return jsonify({'status': 'ok'})
 
 
